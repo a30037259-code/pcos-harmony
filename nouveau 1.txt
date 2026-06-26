@@ -1,0 +1,113 @@
+<write_to_file>
+<path>index.html
+</path>
+<content><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCOS Harmony - Your Holistic Wellness Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-container">
+<!-- HOME -->
+<section id="home" class="section active">
+<div class="header">
+<h1 class="greeting" id="greeting">Good morning</h1>
+<p class="date" id="date"></p>
+<div id="patternBadge"></div>
+</div>
+<div class="affirmation-card"><p class="affirmation-text" id="affirmationText"></p></div>
+<div class="mood-card">
+<h2 class="section-title">How are you feeling today?</h2>
+<div class="mood-slider-group"><div class="mood-label"><span>⚡ Energy Level</span><span class="mood-value" id="energyValue">3</span></div><input type="range" id="energy" min="1" max="5" value="3"></div>
+<div class="mood-slider-group"><div class="mood-label"><span>😊 Mood</span><span class="mood-value" id="moodValue">3</span></div><input type="range" id="mood" min="1" max="5" value="3"></div>
+<div class="mood-slider-group"><div class="mood-label"><span>🍫 Cravings</span><span class="mood-value" id="cravingsValue">3</span></div><input type="range" id="cravings" min="1" max="5" value="3"></div>
+<div class="mood-slider-group"><div class="mood-label"><span>💨 Bloating</span><span class="mood-value" id="bloatingValue">3</span></div><input type="range" id="bloating" min="1" max="5" value="3"></div>
+<button class="save-mood-btn" id="saveMoodBtn">Save Today's Mood</button>
+</div>
+<h2 class="section-title">Today's Recommendations</h2>
+<div class="recommendations">
+<div class="recommendation-card" id="workoutRecCard"><div class="rec-icon workout"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div class="rec-content"><div class="rec-title" id="workoutRec">Gentle Yoga Flow</div><div class="rec-description">15 min • Perfect for your energy level</div></div></div>
+<div class="recommendation-card"><div class="rec-icon hydration"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><div class="rec-content"><div class="rec-title">Stay Hydrated</div><div class="rec-description">Aim for 8 glasses today</div></div></div>
+<div class="recommendation-card"><div class="rec-icon tip"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div><div class="rec-content"><div class="rec-title" id="dailyTip">Daily Wellness Tip</div><div class="rec-description">Tap to learn more</div></div></div>
+</div>
+<h2 class="section-title">Your Progress</h2>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-value" id="cycleDay">--</div><div class="stat-label">Cycle Day</div></div>
+<div class="stat-card"><div class="stat-value" id="daysSincePeriod">--</div><div class="stat-label">Days Since Period</div></div>
+<div class="stat-card"><div class="stat-value" id="workoutStreak">0</div><div class="stat-label">Workout Streak</div></div>
+<div class="stat-card"><div class="stat-value" id="moodTrend">--</div><div class="stat-label">Mood Trend</div></div>
+</div>
+<div class="mood-trend"><h2 class="section-title">Last 7 Days</h2><div class="trend-chart" id="trendChart"></div></div>
+</section>
+
+<!-- CYCLE -->
+<section id="cycle" class="section">
+<div class="cycle-header"><h1>Your Cycle 🌸</h1><div class="cycle-actions"><button class="icon-btn" id="exportBtn" title="Export"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button><button class="icon-btn" id="importBtn" title="Import"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg></button><input type="file" id="importFile" accept=".json" style="display:none"></div></div>
+<div class="pattern-card"><h3>🌙 Your Unique Pattern</h3><div class="pattern-stats"><div class="pattern-stat"><div class="pattern-stat-value" id="avgCycleLength">--</div><div class="pattern-stat-label">Avg Cycle</div></div><div class="pattern-stat"><div class="pattern-stat-value" id="cycleRange">--</div><div class="pattern-stat-label">Range</div></div><div class="pattern-stat"><div class="pattern-stat-value" id="avgPeriodLength">--</div><div class="pattern-stat-label">Avg Period</div></div></div><p class="pattern-message" id="patternMessage">Start logging to discover your unique pattern. Every body is different. 💛</p></div>
+<div class="quick-actions">
+<button class="quick-action-btn" id="logPeriodBtn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg><span>Log Period</span></button>
+<button class="quick-action-btn" id="logSymptomsBtn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><span>Log Symptoms</span></button>
+</div>
+<div class="calendar-container">
+<div class="calendar-nav"><button class="calendar-nav-btn" id="prevMonth"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div class="calendar-month" id="calendarMonth"></div><button class="calendar-nav-btn" id="nextMonth"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button></div>
+<div class="calendar-weekdays"><div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div><div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div></div>
+<div class="calendar-grid" id="calendarGrid"></div>
+<div class="calendar-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--period-medium)"></div><span>Period</span></div><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><span>Today</span></div><div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div><span>Logged</span></div></div>
+</div>
+<div class="cycle-chart-card"><h2 class="section-title">Your Cycle History</h2><div id="cycleChartContainer"><div class="no-data-message">Log at least 2 cycles 🌱</div></div></div>
+<div class="insights-section"><h2 class="section-title">Insights & Patterns</h2><div id="insightsContainer"></div></div>
+<div class="data-section"><h3 style="font-size:18px;margin-bottom:var(--spacing-sm)">Data Management</h3><p style="font-size:13px;color:var(--text-light);margin-bottom:var(--spacing-md)">Your data stays on your device.</p><div class="data-buttons"><button class="data-btn export" id="exportBtn2">Export Backup</button><button class="data-btn import" id="importBtn2">Import Data</button><button class="data-btn clear" id="clearDataBtn">Clear All Data</button></div></div>
+</section>
+
+<!-- WORKOUTS -->
+<section id="workouts" class="section">
+<div class="workouts-header"><h1>Move Your Way 💪</h1><p class="workouts-subtitle">PCOS-friendly workouts that meet you where you are</p></div>
+<div class="today-suggestion" id="todaySuggestion"><div class="suggestion-label">✨ Recommended for you today</div><div class="suggestion-title" id="suggestionTitle">Loading...</div><div class="suggestion-reason" id="suggestionReason"></div><div class="suggestion-meta" id="suggestionMeta"></div></div>
+<div class="workout-tabs"><button class="workout-tab active" data-workout-tab="library">Library</button><button class="workout-tab" data-workout-tab="favorites">Favorites</button><button class="workout-tab" data-workout-tab="history">History</button></div>
+<div class="workout-tab-content active" id="libraryTab"><div class="search-filter"><input type="text" class="search-input" id="workoutSearch" placeholder="🔍 Search workouts..."><div class="filter-chips"><button class="filter-chip active" data-filter="all">All</button><button class="filter-chip" data-filter="insulin">Insulin</button><button class="filter-chip" data-filter="fatigue">Fatigue</button><button class="filter-chip" data-filter="joint">Joint</button><button class="filter-chip" data-filter="cycle">Cycle</button></div></div><div class="workout-grid" id="workoutGrid"></div></div>
+<div class="workout-tab-content" id="favoritesTab"><div class="workout-grid" id="favoritesGrid"></div></div>
+<div class="workout-tab-content" id="historyTab"><div class="history-stats"><div class="history-stat"><div class="history-stat-value" id="totalWorkouts">0</div><div class="history-stat-label">Total</div></div><div class="history-stat"><div class="history-stat-value" id="currentStreak">0</div><div class="history-stat-label">Streak 🔥</div></div><div class="history-stat"><div class="history-stat-value" id="thisWeek">0</div><div class="history-stat-label">This Week</div></div></div><div class="history-list" id="historyList"></div></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="section"><div class="quiz-container" id="quizContainer"></div></section>
+
+<!-- BREATHE -->
+<section id="breathe" class="section">
+<div class="breathe-header">
+<h1>Rest & Restore 🌿</h1>
+<p class="breathe-subtitle">Your sanctuary for calm, rest, and healing</p>
+</div>
+<div class="breathe-tabs">
+<button class="breathe-tab active" data-breathe-tab="breathing">🌬️ Breathing</button>
+<button class="breathe-tab" data-breathe-tab="meditation">🧘‍♀️ Meditation</button>
+<button class="breathe-tab" data-breathe-tab="sounds">🎵 Sounds</button>
+<button class="breathe-tab" data-breathe-tab="journal">📓 Journal</button>
+</div>
+<div class="breathe-panel active" id="breathingPanel"></div>
+<div class="breathe-panel" id="meditationPanel"></div>
+<div class="breathe-panel" id="soundsPanel"></div>
+<div class="breathe-panel" id="journalPanel"></div>
+</section>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+<button class="nav-item active" data-section="home"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span></button>
+<button class="nav-item" data-section="cycle"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Cycle</span></button>
+<button class="nav-item" data-section="workouts"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span>Workouts</span></button>
+<button class="nav-item" data-section="quiz"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg><span>Quiz</span></button>
+<button class="nav-item" data-section="breathe"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg><span>Breathe</span></button>
+</nav>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+</content>
+</write_to_file>

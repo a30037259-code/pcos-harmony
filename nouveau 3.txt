@@ -1,0 +1,2232 @@
+
+// CONSTANTS
+const AFFIRMATIONS = ["Your body is doing its best. Let's work with it, not against it.","Rest is productive. You don't have to earn rest.","You are not broken. You are adapting.","Small steps still move you forward.","Be gentle with yourself. Healing is not linear.","Your worth is not defined by your productivity.","Every day is a fresh start. Be kind to yourself today.","You are stronger than you know, braver than you believe.","Progress, not perfection, is the goal.","Your body is your ally, not your enemy.","Honor your body's wisdom. It knows what it needs.","You deserve compassion, especially from yourself.","Taking care of yourself is not selfish—it's essential.","You are enough, exactly as you are right now."];
+const DAILY_TIPS = ["Try adding cinnamon to your morning routine—it may help balance blood sugar.","A 10-minute walk after meals can help regulate insulin levels.","Spearmint tea may help reduce androgen levels naturally.","Prioritize sleep—aim for 7-9 hours to support hormone balance.","Strength training 2-3x per week can improve insulin sensitivity.","Inositol supplements may help with PCOS symptoms—ask your doctor.","Reduce stress with deep breathing—cortisol impacts hormone balance.","Eat protein with every meal to stabilize blood sugar.","Seed cycling may help balance hormones throughout your cycle.","Gentle yoga can reduce cortisol and improve mood.","Stay hydrated—aim for 8 glasses of water daily.","Magnesium-rich foods can help with sleep and mood.","Limit processed foods—they can worsen inflammation.","Omega-3 fatty acids support hormone health and reduce inflammation.","Track your symptoms to identify patterns and triggers.","Connect with others who understand—community heals.","Celebrate small wins—they add up to big changes.","Listen to your body's hunger and fullness cues.","Anti-inflammatory foods like berries and leafy greens support PCOS management.","Remember: You are more than your diagnosis."];
+const SYMPTOM_LABELS = {cramps:'Cramps',bloating:'Bloating',fatigue:'Fatigue',headache:'Headache',acne:'Acne',breastTenderness:'Breast Tenderness'};
+// WORKOUT LIBRARY (10 workouts)
+const WORKOUT_LIBRARY = [
+{id:'w001',name:'Full-Body Strength Builder',emoji:'🏋️‍♀️',category:'insulin',duration:25,difficulty:'intermediate',equipment:'None',benefits:'Builds muscle to improve insulin sensitivity',warmup:[{name:'March in Place',duration:60,cues:'Lift knees comfortably'}],exercises:[{name:'Bodyweight Squats',duration:45,rest:15,emoji:'🦵',cues:'Keep chest up, weight in heels',modifications:{easier:'Sit to chair',harder:'Add pulse'}},{name:'Push-ups',duration:40,rest:20,emoji:'💪',cues:'Core engaged',modifications:{easier:'Wall push-ups',harder:'Full push-ups'}},{name:'Reverse Lunges',duration:45,rest:15,emoji:'🚶‍♀️',cues:'Step back, knees 90°',modifications:{easier:'Hold chair',harder:'Jump switch'},skipIfFatigued:true},{name:'Glute Bridges',duration:40,rest:20,emoji:'🍑',cues:'Squeeze glutes at top',modifications:{easier:'Smaller range',harder:'Single leg'}},{name:'Plank Hold',duration:30,rest:30,emoji:'🧘‍♀️',cues:'Core tight',modifications:{easier:'Knees down',harder:'Shoulder taps'}}],cooldown:[{name:'Child's Pose',duration:45,cues:'Arms extended, breathe'}]},
+{id:'w002',name:'Quick HIIT Energy Burst',emoji:'⚡',category:'insulin',duration:15,difficulty:'intermediate',equipment:'None',benefits:'Short, effective for insulin sensitivity',warmup:[{name:'Light Jog',duration:60,cues:'Easy pace'}],exercises:[{name:'Jumping Jacks',duration:30,rest:15,emoji:'⭐',cues:'Land softly',modifications:{easier:'Step jacks',harder:'Add push-up'},skipIfFatigued:true},{name:'Mountain Climbers',duration:30,rest:15,emoji:'⛰️',cues:'Drive knees to chest',modifications:{easier:'Slow climbers',harder:'Cross-body'},skipIfFatigued:true},{name:'Jump Squats',duration:30,rest:20,emoji:'🦘',cues:'Soft landing',modifications:{easier:'Regular squats',harder:'Tuck jumps'},skipIfFatigued:true},{name:'High Knees',duration:30,rest:15,emoji:'🏃‍♀️',cues:'Knees to waist',modifications:{easier:'March',harder:'Fast pace'},skipIfFatigued:true}],cooldown:[{name:'Walking',duration:60,cues:'Slow down'}]},
+{id:'w006',name:'Gentle Morning Yoga Flow',emoji:'🧘‍♀️',category:'fatigue',duration:15,difficulty:'beginner',equipment:'None',benefits:'Wakes up body gently, reduces cortisol',warmup:[{name:'Seated Breathing',duration:60,cues:'Deep belly breaths'}],exercises:[{name:'Cat-Cow',duration:60,rest:0,emoji:'🐱',cues:'Move with breath',modifications:{easier:'Smaller',harder:'Add neck rolls'}},{name:'Child's Pose',duration:60,rest:0,emoji:'🙇‍♀️',cues:'Breathe into back',modifications:{easier:'Knees wide',harder:'Arms extended'}},{name:'Downward Dog',duration:45,rest:15,emoji:'🐕',cues:'Pedal feet',modifications:{easier:'Bend knees',harder:'Straighten'}},{name:'Pigeon Pose',duration:60,rest:0,emoji:'🕊️',cues:'Hip opener',modifications:{easier:'Reclined pigeon',harder:'Fold forward'}}],cooldown:[{name:'Savasana',duration:120,cues:'Just breathe'}]},
+{id:'w007',name:'Restorative Stretch Session',emoji:'🌿',category:'fatigue',duration:20,difficulty:'beginner',equipment:'Pillows',benefits:'Nervous system reset',warmup:[{name:'Body Scan',duration:120,cues:'Notice tension'}],exercises:[{name:'Supported Fish',duration:120,rest:0,emoji:'🐟',cues:'Pillow under back',modifications:{easier:'Lower',harder:'Higher'}},{name:'Reclined Butterfly',duration:120,rest:0,emoji:'🦋',cues:'Pillows under knees',modifications:{easier:'Closer',harder:'Further'}},{name:'Legs Up Wall',duration:180,rest:0,emoji:'🦵',cues:'Total relaxation',modifications:{easier:'Bend knees',harder:'Straight'}}],cooldown:[{name:'Savasana',duration:180,cues:'Full rest'}]},
+{id:'w008',name:'The "Barely Moving" Routine',emoji:'🛏️',category:'fatigue',duration:10,difficulty:'beginner',equipment:'Bed or floor',benefits:'Something is better than nothing',warmup:[{name:'Deep Breaths',duration:60,cues:'4 in, 6 out'}],exercises:[{name:'Ankle Circles',duration:30,rest:0,emoji:'🦶',cues:'Each direction'},{name:'Knee Hugs',duration:30,rest:0,emoji:'🤗',cues:'Gentle release'},{name:'Gentle Twist',duration:45,rest:0,emoji:'🔄',cues:'Slow and easy',modifications:{easier:'Smaller',harder:'Full range'}},{name:'Full Body Stretch',duration:45,rest:0,emoji:'🌟',cues:'Stretch everything'}],cooldown:[{name:'Rest',duration:60,cues:'You showed up'}]},
+{id:'w010',name:'Floor Swimming Flow',emoji:'🏊‍♀️',category:'joint',duration:20,difficulty:'beginner',equipment:'Mat',benefits:'Zero impact, builds strength',warmup:[{name:'Child's Pose',duration:45,cues:'Spine length'}],exercises:[{name:'Superman Swims',duration:45,rest:15,emoji:'🦸‍♀️',cues:'Swimming motion',modifications:{easier:'Lower',harder:'Add legs'}},{name:'Dead Bug',duration:40,rest:20,emoji:'🐛',cues:'Lower back down',modifications:{easier:'Just legs',harder:'Slower'}},{name:'Bird Dog',duration:40,rest:20,emoji:'🐦',cues:'Opposite arm/leg',modifications:{easier:'Just arm',harder:'Hold'}}],cooldown:[{name:'Child's Pose',duration:60,cues:'Breathe'}]},
+{id:'w013',name:'Chair Yoga Flow',emoji:'🪑',category:'joint',duration:15,difficulty:'beginner',equipment:'Chair',benefits:'Yoga with joint support',warmup:[{name:'Seated Mountain',duration:45,cues:'Sit tall'}],exercises:[{name:'Seated Cat-Cow',duration:60,rest:0,emoji:'🐱',cues:'Hands on knees',modifications:{easier:'Small',harder:'Deeper'}},{name:'Seated Side Stretch',duration:45,rest:0,emoji:'🌳',cues:'Each side',modifications:{easier:'Hand on chair',harder:'Hold'}},{name:'Chair Pigeon',duration:60,rest:0,emoji:'🕊️',cues:'Ankle over knee',modifications:{easier:'Foot close',harder:'Lean forward'}}],cooldown:[{name:'Seated Mountain',duration:60,cues:'Return to center'}]},
+{id:'w014',name:'Follicular Flow',emoji:'🌱',category:'cycle',duration:25,difficulty:'intermediate',equipment:'None',benefits:'Matches rising estrogen',phase:'follicular',warmup:[{name:'Dynamic Warm-up',duration:120,cues:'Full body'}],exercises:[{name:'Jump Squats',duration:40,rest:20,emoji:'🦘',cues:'Explosive',modifications:{easier:'Regular',harder:'Tuck'},skipIfFatigued:true},{name:'Push-ups',duration:40,rest:20,emoji:'💪',cues:'Feel strong',modifications:{easier:'Knees',harder:'Diamond'}},{name:'Reverse Lunges',duration:45,rest:15,emoji:'🚶‍♀️',cues:'Feel power',modifications:{easier:'Shorter',harder:'Jump'}}],cooldown:[{name:'Savasana',duration:60,cues:'Absorb power'}]},
+{id:'w017',name:'Menstrual Rest & Restore',emoji:'🌙',category:'cycle',duration:15,difficulty:'beginner',equipment:'Pillows',benefits:'Honors need for rest',phase:'menstrual',warmup:[{name:'Comfortable Seating',duration:60,cues:'Breathe'}],exercises:[{name:'Gentle Cat-Cow',duration:60,rest:0,emoji:'🐱',cues:'Very small',modifications:{easier:'Just breathing',harder:'Full'}},{name:'Child's Pose',duration:90,rest:0,emoji:'🙇‍♀️',cues:'Total comfort',modifications:{easier:'Knees wide',harder:'Arms extended'}},{name:'Legs Up Wall',duration:120,rest:0,emoji:'🦵',cues:'Total rest',modifications:{easier:'Bend',harder:'Straight'}}],cooldown:[{name:'Savasana',duration:180,cues:'Worthy of rest'}]}
+];
+// QUIZ DATA
+const QUIZ_QUESTIONS = [
+{id:'q1',text:'How would you describe your weight distribution?',options:[{text:'Weight gain primarily around middle/belly',scores:{insulin:3,inflammatory:1}},{text:'Weight evenly distributed',scores:{inflammatory:1,adrenal:1}},{text:'Struggle to gain weight or recently lost',scores:{brainHormone:3}},{text:'Fluctuates with cycle',scores:{insulin:2,inflammatory:1}}]},
+{id:'q2',text:'How often do you experience intense sugar/carb cravings?',options:[{text:'Daily or multiple times a day',scores:{insulin:3}},{text:'Several times a week',scores:{insulin:2,adrenal:1}},{text:'Occasionally',scores:{inflammatory:1}},{text:'Rarely or never',scores:{brainHormone:1}}]},
+{id:'q3',text:'Which skin issues do you experience most?',options:[{text:'Acne, especially along jawline',scores:{insulin:3}},{text:'Eczema, psoriasis, or sensitivity',scores:{inflammatory:3}},{text:'Dark patches on skin',scores:{insulin:3}},{text:'Skin tags',scores:{insulin:2}}]},
+{id:'q4',text:'How would you describe your hair?',options:[{text:'Facial/body hair growth',scores:{insulin:3}},{text:'Hair thinning on scalp',scores:{insulin:2,adrenal:1}},{text:'Hair seems normal',scores:{inflammatory:1}},{text:'Hair loss after stopping birth control',scores:{brainHormone:2}}]},
+{id:'q5',text:'How regular are your periods?',options:[{text:'Very irregular or absent',scores:{insulin:3,brainHormone:2}},{text:'Somewhat irregular',scores:{insulin:1,inflammatory:1}},{text:'Regular but painful/heavy',scores:{inflammatory:2}},{text:'Regular and comfortable',scores:{adrenal:1}}]},
+{id:'q6',text:'How would you describe your digestion?',options:[{text:'Chronic bloating after meals',scores:{inflammatory:3}},{text:'IBS symptoms',scores:{inflammatory:3,adrenal:1}},{text:'Generally okay',scores:{insulin:1}},{text:'Worsens with stress',scores:{adrenal:2,inflammatory:1}}]},
+{id:'q7',text:'How would you describe your energy?',options:[{text:'Constant fatigue that sleep doesn't fix',scores:{inflammatory:3,adrenal:2}},{text:'Energy crashes after meals',scores:{insulin:3}},{text:'Wired but tired',scores:{adrenal:3}},{text:'Generally okay',scores:{brainHormone:1}}]},
+{id:'q8',text:'How often do you get headaches/migraines?',options:[{text:'Frequent (weekly+)',scores:{inflammatory:3,adrenal:1}},{text:'Occasional',scores:{insulin:1}},{text:'Around my period',scores:{inflammatory:2}},{text:'Rarely',scores:{brainHormone:1}}]},
+{id:'q9',text:'How is your sleep quality?',options:[{text:'Difficulty falling/staying asleep',scores:{adrenal:3}},{text:'Generally okay',scores:{insulin:1}},{text:'Sleep a lot but still tired',scores:{inflammatory:2,insulin:1}},{text:'Issues after stopping birth control',scores:{brainHormone:2}}]},
+{id:'q10',text:'How would you describe your stress?',options:[{text:'High stress most of the time',scores:{adrenal:3}},{text:'Moderate, manage okay',scores:{inflammatory:1}},{text:'Stress worsens PCOS symptoms',scores:{adrenal:2,inflammatory:1}},{text:'Generally relaxed',scores:{insulin:1}}]},
+{id:'q11',text:'How do you feel in the morning?',options:[{text:'Morning anxiety or dread',scores:{adrenal:3}},{text:'Groggy and slow',scores:{insulin:2}},{text:'Okay once up',scores:{inflammatory:1}},{text:'Wake up rested',scores:{brainHormone:1}}]},
+{id:'q12',text:'How does caffeine affect you?',options:[{text:'Makes me jittery/anxious',scores:{adrenal:3}},{text:'Need it to function',scores:{insulin:2,inflammatory:1}},{text:'Doesn't affect me much',scores:{brainHormone:1}},{text:'Had to reduce/eliminate',scores:{adrenal:2}}]},
+{id:'q13',text:'How severe is your PMS?',options:[{text:'Severe - mood swings, irritability',scores:{adrenal:3,inflammatory:1}},{text:'Moderate',scores:{insulin:2}},{text:'Mild',scores:{brainHormone:1}},{text:'Worsened after stopping birth control',scores:{brainHormone:3}}]},
+{id:'q14',text:'Do you have food sensitivities?',options:[{text:'Yes - gluten, dairy cause reactions',scores:{inflammatory:3}},{text:'Suspect some',scores:{inflammatory:2}},{text:'No obvious sensitivities',scores:{insulin:1,adrenal:1}},{text:'Developed after stopping birth control',scores:{brainHormone:2}}]},
+{id:'q15',text:'How would you describe exercise habits?',options:[{text:'Over-exercise or feel compelled',scores:{brainHormone:3}},{text:'Regular, listen to body',scores:{insulin:2}},{text:'Struggle due to fatigue',scores:{inflammatory:2,adrenal:1}},{text:'Had to reduce intensity',scores:{adrenal:2,brainHormone:1}}]},
+{id:'q16',text:'When did PCOS symptoms start/worsen?',options:[{text:'Gradually, especially teens',scores:{insulin:2,inflammatory:1}},{text:'After stopping birth control',scores:{brainHormone:3}},{text:'During high stress period',scores:{adrenal:3}},{text:'After significant weight gain',scores:{insulin:3}}]},
+{id:'q17',text:'How is your mental health?',options:[{text:'Anxiety is major issue',scores:{adrenal:3}},{text:'Depression or low mood',scores:{inflammatory:2,brainHormone:2}},{text:'Mood swings through cycle',scores:{adrenal:2,insulin:1}},{text:'Generally stable',scores:{insulin:1}}]},
+{id:'q18',text:'Do you experience joint pain/inflammation?',options:[{text:'Frequent joint pain',scores:{inflammatory:3}},{text:'Occasional discomfort',scores:{inflammatory:2}},{text:'Rarely',scores:{insulin:1,adrenal:1}},{text:'Worsens with certain foods',scores:{inflammatory:3}}]}
+];
+const PCOS_PATTERNS = {
+insulin:{name:'Insulin-Androgen PCOS',icon:'🍬',description:'Your symptoms are primarily driven by insulin resistance and elevated androgens. This is the most common PCOS pattern.',characteristics:['Weight gain around middle','Intense sugar/carb cravings','Acne along jawline','Facial/body hair growth','Hair thinning on scalp','Irregular or absent periods','Dark patches on skin','Skin tags'],whatsHappening:'Your body produces too much insulin, stimulating ovaries to produce excess androgens. This disrupts ovulation and causes many symptoms.',nutrition:{embrace:['Protein at every meal','Healthy fats (avocado, olive oil, nuts)','Fiber-rich vegetables','Low-glycemic fruits (berries)','Cinnamon and apple cider vinegar','Complex carbs (quinoa, sweet potato)'],minimize:['Refined carbs (white bread, pasta)','Sugary drinks and juices','Processed foods','High-sugar cereals','Excessive caffeine on empty stomach']},exercise:['Strength training 3-4x/week','Walking after meals (10-15 min)','HIIT 1-2x/week (short bursts)','Yoga for stress','Avoid excessive cardio'],lifestyle:['Prioritize sleep (7-9 hours)','Manage stress through meditation','Eat within 1 hour of waking','Don't skip meals','Work with a registered dietitian'],supplements:['Inositol (discuss with doctor)','Magnesium','Omega-3 fatty acids','Vitamin D','Chromium','Berberine (discuss with doctor)'],sampleDay:{breakfast:'Scrambled eggs with spinach and avocado, berries, cinnamon tea',lunch:'Grilled chicken salad with quinoa, roasted vegetables, olive oil',snack:'Apple with almond butter and cinnamon',dinner:'Baked salmon with roasted Brussels sprouts and sweet potato',evening:'Chamomile tea, avoid eating 2-3 hours before bed'},recommendedWorkouts:['w001','w002','w014']},
+inflammatory:{name:'Inflammatory PCOS',icon:'🔥',description:'Your symptoms are primarily driven by chronic inflammation. Your immune system is overactive, disrupting hormone balance.',characteristics:['Chronic bloating','Skin issues (eczema, psoriasis)','Fatigue not fixed by sleep','Headaches/migraines','Gut issues (IBS)','Joint pain','Brain fog','Food sensitivities'],whatsHappening:'Chronic inflammation triggers your immune system, disrupting hormone signaling and potentially leading to insulin resistance. May originate in your gut.',nutrition:{embrace:['Omega-3 rich foods (salmon, walnuts, flax)','Turmeric and ginger','Leafy green vegetables','Bone broth','Fermented foods (if tolerated)','Berries and colorful vegetables','Extra virgin olive oil'],minimize:['Gluten (often inflammatory)','Dairy (often inflammatory)','Nightshades (tomatoes, peppers)','Processed seed oils','Refined sugar','Alcohol','Processed foods']},exercise:['Gentle movement (walking, swimming, yoga)','Avoid overtraining','Restorative yoga','Pilates for core','Listen to your body'],lifestyle:['Identify trigger foods (elimination diet)','Prioritize gut health','Reduce environmental toxins','Get enough sleep','Manage stress','Work with functional medicine practitioner'],supplements:['Omega-3 fish oil','Curcumin (turmeric)','Probiotics','Vitamin D','Magnesium','Glutamine (gut healing)'],sampleDay:{breakfast:'Smoothie with collagen, berries, spinach, ginger, turmeric, coconut milk',lunch:'Large salad with grilled salmon, avocado, olive oil/lemon',snack:'Walnuts and blueberries',dinner:'Bone broth soup with chicken, vegetables, sauerkraut',evening:'Golden milk (turmeric latte with coconut milk)'},recommendedWorkouts:['w006','w007','w010','w013']},
+adrenal:{name:'Adrenal PCOS',icon:'⚡',description:'Your symptoms are driven by altered stress response and elevated DHEA-S. Your nervous system is in overdrive.',characteristics:['Stress-driven symptoms','Morning anxiety','Sleep issues','Fatigue worsens with caffeine','Wired but tired','Salt cravings','Severe PMS','Symptoms worsen with stress'],whatsHappening:'Chronic stress dysregulated your HPA axis, causing adrenal glands to produce excess DHEA-S. This creates PCOS symptoms even with normal insulin.',nutrition:{embrace:['Balanced meals with protein, fat, complex carbs','Magnesium-rich foods','Adaptogenic herbs (discuss with doctor)','Complex carbs at dinner','Regular meal timing','Hydration with electrolytes'],minimize:['Excessive caffeine','Sugar and refined carbs','Alcohol','Intermittent fasting','Skipping meals']},exercise:['Gentle exercise (walking, yoga, swimming)','Avoid intense cardio/HIIT','Restorative yoga and meditation','Light strength training','Exercise in nature','Don't exercise fasted'],lifestyle:['Morning sunlight exposure','Limit caffeine (especially after noon)','Prioritize sleep (bed by 10-11pm)','Daily stress management','Say no to overcommitment','Create boundaries','Consider therapy'],supplements:['Adaptogens (ashwagandha, rhodiola)','Magnesium','B-complex vitamins','Vitamin C','Phosphatidylserine','L-theanine'],sampleDay:{breakfast:'Oatmeal with walnuts, berries, cinnamon. Herbal tea.',lunch:'Turkey avocado wrap with side salad',snack:'Hard-boiled eggs with sea salt',dinner:'Grilled chicken with roasted vegetables and quinoa',evening:'Chamomile tea, magnesium, early bedtime'},recommendedWorkouts:['w006','w007','w008','w017']},
+brainHormone:{name:'Brain-Hormone Axis PCOS',icon:'🧠',description:'Your symptoms are driven by disrupted brain-ovary signaling, often from stopping birth control, under-eating, or over-exercising.',characteristics:['Post-pill PCOS','History of hypothalamic amenorrhea','Mood swings','Depression or anxiety','History of disordered eating','Over-exercising history','Low body weight','PMS worsened after stopping birth control'],whatsHappening:'Brain signaling to ovaries has been disrupted, often from stress, under-eating, over-exercising, or coming off hormonal birth control. Your body needs time and nourishment.',nutrition:{embrace:['Adequate calories (don't restrict)','Sufficient carbohydrates','Healthy fats (hormone building blocks)','Regular meals','Nutrient-dense foods (eggs, fish)','Fermented foods','Enough protein'],minimize:['Calorie restriction','Excessive exercise','Intermittent fasting','Elimination diets (unless necessary)','Skipping meals','Over-focus on "clean" eating']},exercise:['Gentle, nourishing movement only','Walking','Restorative yoga','Avoid intense exercise initially','Listen to your body','Rest when needed','Gradually increase over months'],lifestyle:['Work with therapist if ED history','Reduce all stress','Prioritize rest and recovery','Be patient (6-12 months recovery)','Consider herbal support (vitex)','Adequate sleep','Nourish relationships'],supplements:['Vitex (chasteberry)','B-vitamins','Magnesium','Omega-3s','Zinc','Iron if deficient'],sampleDay:{breakfast:'Full-fat yogurt with granola, berries, honey',lunch:'Salmon with rice and roasted vegetables',snack:'Trail mix with nuts, seeds, dark chocolate',dinner:'Grass-fed beef with sweet potato and butter',evening:'Warm milk with honey, early bedtime'},recommendedWorkouts:['w006','w007','w008','w017']}
+];
+// BREATHE DATA
+const BREATHING_EXERCISES = [
+{id:'478',name:'4-7-8 Calming Breath',description:'Perfect for anxiety, sleep, and stress relief',theme:'calm',inhale:4,hold:7,exhale:8,rounds:4,bestFor:'Anxiety • Sleep • Stress'},
+{id:'box',name:'Box Breathing',description:'Navy SEAL technique for focus and calm alertness',theme:'focus',inhale:4,hold1:4,exhale:4,hold2:4,rounds:6,bestFor:'Focus • Calm Alertness'},
+{id:'coherent',name:'Coherent Breathing',description:'Balance your nervous system at 5 breaths per minute',theme:'balance',inhale:5,exhale:5,duration:300,bestFor:'Nervous System • HRV'},
+{id:'energizing',name:'Energizing Breath',description:'Quick morning energy boost when fatigue hits',theme:'energy',breaths:30,bestFor:'Morning Energy • Fatigue'}
+];
+const MEDITATIONS = [
+{id:'release-shame',name:'Release the Shame',duration:600,theme:'release',description:'Self-compassion for PCOS struggles',text:['Find a comfortable position...','Close your eyes gently...','Take a deep breath in...','And release slowly...','You are not broken.','You are adapting.','PCOS is not your fault.','It is not a punishment.','You have done nothing wrong.','Release the shame you carry...','Imagine it leaving with each exhale...','Your body has been working so hard...','Thank it for trying...','You are worthy of compassion...','You are worthy of care...','Your body is doing its best...','You are enough...','Exactly as you are...','Right now...','Take another deep breath...','Feel the lightness...','When ready...','Gently open your eyes.','Carry this compassion with you.']},
+{id:'body-gratitude',name:'Body Gratitude',duration:480,theme:'gratitude',description:'Thank your body for all it does',text:['Settle into comfort...','Bring attention to your body...','Not to change it...','But to thank it...','Thank your feet...','For carrying you today...','Thank your legs...','For their strength...','Thank your hips...','For their wisdom...','Thank your belly...','For digesting, nourishing...','Thank your heart...','For beating steadily...','Thank your lungs...','For breathing without asking...','Thank your skin...','For protecting you...','Your body is not your enemy...','It is your ally...','Working hard for you...','Feel gratitude for what it CAN do...','Not just how it looks...','But how it lives...','You are grateful for this body...','Take a deep breath of appreciation...','When ready...','Return to the present.']},
+{id:'hormonal-harmony',name:'Hormonal Harmony',duration:720,theme:'balance',description:'Visualization of balance and equilibrium',text:['Find stillness...','Close your eyes...','Imagine your hormones...','As a symphony...','Each one playing its part...','In perfect harmony...','Visualize balance...','And equilibrium...','Your body knows...','How to find balance...','Trust the healing process...','Every cell in your body...','Is working for you...','You are supported...','In your healing...','Peace flows through you...','Harmony is your natural state...','You are aligned...','With your body's wisdom...','Feel the balance returning...','Trust the journey...','You are whole...','You are healing...','When ready...','Return to the present moment.']},
+{id:'sleep-prep',name:'Sleep Preparation',duration:900,theme:'sleep',description:'Progressive relaxation for restful sleep',text:['Lie down comfortably...','Close your eyes...','Release the day...','Let it go...','Progressively relax...','Each muscle...','Start with your feet...','Let them soften...','Your legs grow heavy...','And relaxed...','Your hips release tension...','Your belly softens...','With each breath...','Your chest opens...','And relaxes...','Your shoulders drop...','Away from your ears...','Your jaw unclenches...','Your face softens...','Your mind becomes quiet...','And still...','You are safe...','You are at peace...','Sleep comes easily now...','Rest deeply...','You deserve it...','Drift now...','Into peaceful sleep...']},
+{id:'morning-intention',name:'Morning Intention',duration:300,theme:'morning',description:'Set positive intentions for your day',text:['Good morning...','Welcome to a new day...','Take a deep breath...','Of possibility...','What intention...','Do you set for today?','You are capable...','You are strong...','You will handle...','Whatever comes...','You deserve good things...','Today...','Your body will support you...','You are worthy...','Of joy and peace...','Move through today...','With grace...','Trust yourself...','Trust the process...','You've got this...','When ready...','Open your eyes...','To your beautiful day.']},
+{id:'stress-release',name:'Stress Release',duration:600,theme:'release',description:'Identify and release what weighs on you',text:['Acknowledge the stress...','You're feeling...','It's okay...','You're human...','Identify what's causing stress...','See it clearly...','Now imagine...','Placing it in a box...','Close the box...','Set it aside...','You can deal with it later...','Right now...','You need peace...','Feel the stress leaving...','Your body...','Your shoulders relax...','Your breath deepens...','You return to center...','Calm is your natural state...','You are okay...','Everything is okay...','You are safe here...','When ready...','Return to the present.','Carry this calm with you.']}
+];
+const SOUNDS = [
+{id:'rain',name:'Rain',icon:'🌧️',type:'filtered'},
+{id:'ocean',name:'Ocean',icon:'🌊',type:'ocean'},
+{id:'forest',name:'Forest',icon:'🌲',type:'forest'},
+{id:'white',name:'White Noise',icon:'⚪',type:'white'},
+{id:'pink',name:'Pink Noise',icon:'🩷',type:'pink'},
+{id:'brown',name:'Brown Noise',icon:'🟤',type:'brown'}
+];
+const JOURNAL_PROMPTS = {
+checkin:['How are you really feeling today, in your body?','What sensations are present in your body right now?','On a scale of 1-10, how connected do you feel to your body today?'],
+gratitude:['What are 3 things you're grateful for today?','What's one small joy you experienced today?','Who or what made you smile today?'],
+body:['What did your body do for you today?','What's one thing your body allowed you to experience today?','Thank your body for one specific thing today.'],
+wins:['What was a small win today?','What did you do well today?','What's one thing you're proud of from today?'],
+challenges:['What was challenging today, and how did you cope?','What felt hard today? How did you show up for yourself?','What triggered you today, and what did you learn?'],
+compassion:['What kind words do you need to hear right now?','Write a letter of compassion to yourself.','What would you say to a friend feeling what you feel?'],
+insights:['What did you learn about your body today?','What pattern are you noticing in your symptoms?','What is your body trying to tell you?'],
+intentions:['What intention do you set for tomorrow?','What do you need most tomorrow?','How do you want to feel tomorrow?']
+};
+const JOURNAL_TAGS = ['gratitude','self-compassion','insight','challenge','win','body','rest','energy','symptoms','hope'];
+// DATA MANAGEMENT
+function initializeData(){
+const existingData=localStorage.getItem('pcosHarmonyData');
+if(!existingData){
+const initialData={userProfile:{name:"",pattern:null,patternScores:null,quizDate:null,quizCompleted:false,joinDate:new Date().toISOString()},moodLogs:[],cycleLogs:[],workoutHistory:[],journalEntries:[],breathingHistory:[],meditationHistory:[],favorites:{workouts:[],breathing:[],meditations:[],sounds:[]},soundPreferences:{defaultVolume:0.5,defaultTimer:0},settings:{theme:"light",notifications:true}};
+localStorage.setItem('pcosHarmonyData',JSON.stringify(initialData));
+return initialData;
+}
+const data=JSON.parse(existingData);
+if(!data.favorites)data.favorites={workouts:[],breathing:[],meditations:[],sounds:[]};
+if(!data.breathingHistory)data.breathingHistory=[];
+if(!data.meditationHistory)data.meditationHistory=[];
+if(!data.soundPreferences)data.soundPreferences={defaultVolume:0.5,defaultTimer:0};
+return data;
+}
+function saveData(data){localStorage.setItem('pcosHarmonyData',JSON.stringify(data))}
+function getData(){return JSON.parse(localStorage.getItem('pcosHarmonyData'))}
+// UTILITIES
+function formatDate(date){return date.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}
+function getGreeting(){const h=new Date().getHours();if(h<12)return"Good morning";if(h<18)return"Good afternoon";return"Good evening"}
+function getDailyAffirmation(){const t=new Date();const d=Math.floor((t-new Date(t.getFullYear(),0,0))/(1000*60*60*24));return AFFIRMATIONS[d%AFFIRMATIONS.length]}
+function getDailyTip(){const t=new Date();const d=Math.floor((t-new Date(t.getFullYear(),0,0))/(1000*60*60*24));return DAILY_TIPS[d%DAILY_TIPS.length]}
+function getTodayDateString(){return new Date().toISOString().split('T')[0]}
+function daysBetween(d1,d2){const a=new Date(d1+'T00:00:00');const b=new Date(d2+'T00:00:00');return Math.round((b-a)/(1000*60*60*24))}
+function showToast(msg){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
+function hapticFeedback(){if(navigator.vibrate)navigator.vibrate(10)}
+// CYCLE CALCULATIONS
+function getPeriodRanges(cycleLogs){
+const periodDays=cycleLogs.filter(l=>l.type==='period').map(l=>l.date).sort();
+if(periodDays.length===0)return[];
+const ranges=[];
+let cur={start:periodDays[0],end:periodDays[0],flows:[]};
+const first=cycleLogs.find(l=>l.date===periodDays[0]&&l.type==='period');
+if(first&&first.flow)cur.flows.push(first.flow);
+for(let i=1;i<periodDays.length;i++){
+const prev=periodDays[i-1],curr=periodDays[i];
+if(daysBetween(prev,curr)===1){
+cur.end=curr;
+const log=cycleLogs.find(l=>l.date===curr&&l.type==='period');
+if(log&&log.flow)cur.flows.push(log.flow);
+}else{
+ranges.push(cur);
+cur={start:curr,end:curr,flows:[]};
+const log=cycleLogs.find(l=>l.date===curr&&l.type==='period');
+if(log&&log.flow)cur.flows.push(log.flow);
+}
+}
+ranges.push(cur);
+return ranges;
+}
+function getCycleLengths(cycleLogs){const r=getPeriodRanges(cycleLogs);if(r.length<2)return[];const l=[];for(let i=0;i<r.length-1;i++)l.push({start:r[i].start,length:daysBetween(r[i].start,r[i+1].start)});return l}
+function getPeriodLengths(cycleLogs){return getPeriodRanges(cycleLogs).map(r=>daysBetween(r.start,r.end)+1)}
+function getCycleDayForDate(dateStr,cycleLogs){const r=getPeriodRanges(cycleLogs);if(r.length===0)return null;for(let i=r.length-1;i>=0;i--)if(r[i].start<=dateStr)return daysBetween(r[i].start,dateStr)+1;return null}
+function getDaysSinceLastPeriod(cycleLogs){const r=getPeriodRanges(cycleLogs);if(r.length===0)return null;return daysBetween(r[r.length-1].start,getTodayDateString())}
+function getCurrentCyclePhase(cycleLogs){const cd=getCycleDayForDate(getTodayDateString(),cycleLogs);if(!cd)return null;const cl=getCycleLengths(cycleLogs);const avg=cl.length>0?Math.round(cl.reduce((s,c)=>s+c.length,0)/cl.length):28;if(cd<=5)return'menstrual';if(cd<=avg/2-2)return'follicular';if(cd<=avg/2+2)return'ovulatory';return'luteal'}
+// HOME DASHBOARD
+function renderHeader(){const data=getData();const name=data.userProfile.name?, ${data.userProfile.name}:'';document.getElementById('greeting').textContent=${getGreeting()}${name};document.getElementById('date').textContent=formatDate(new Date());const pb=document.getElementById('patternBadge');if(data.userProfile.quizCompleted&&data.userProfile.pattern){const p=PCOS_PATTERNS[data.userProfile.pattern];pb.innerHTML=<span class="pattern-badge">${p.icon} ${p.name}</span>}else pb.innerHTML=''}
+function renderAffirmation(){document.getElementById('affirmationText').textContent=getDailyAffirmation()}
+function renderRecommendations(){const data=getData();const tm=data.moodLogs.find(l=>l.date===getTodayDateString());const e=tm?tm.energy:3;const s=getSmartWorkoutSuggestion();if(s){document.getElementById('workoutRec').textContent=s.workout.name;document.getElementById('workoutRecCard').onclick=()=>{document.querySelector('.nav-item[data-section="workouts"]').click();setTimeout(()=>openWorkoutPlayer(s.workout.id),100)};document.getElementById('workoutRecCard').style.cursor='pointer'}document.getElementById('dailyTip').textContent=getDailyTip()}
+function renderStats(){const data=getData();const cd=getCycleDayForDate(getTodayDateString(),data.cycleLogs);document.getElementById('cycleDay').textContent=cd||'--';const ds=getDaysSinceLastPeriod(data.cycleLogs);document.getElementById('daysSincePeriod').textContent=ds!==null?ds:'--';document.getElementById('workoutStreak').textContent=calculateWorkoutStreak();const rm=data.moodLogs.slice(-7);if(rm.length>=2){const ra=rm.slice(-3).reduce((s,m)=>s+m.mood,0)/3;const om=rm.slice(0,-3);const oa=om.length>0?om.reduce((s,m)=>s+m.mood,0)/om.length:ra;if(ra>oa+0.5)document.getElementById('moodTrend').textContent='↑';else if(ra<oa-0.5)document.getElementById('moodTrend').textContent='↓';else document.getElementById('moodTrend').textContent='→'}}
+function renderMoodTrend(){const data=getData();const l7=data.moodLogs.slice(-7);const c=document.getElementById('trendChart');c.innerHTML='';if(l7.length===0){c.innerHTML='<p style="text-align:center;color:var(--text-light);width:100%;font-size:14px">Start tracking your mood</p>';return}l7.forEach(l=>{const b=document.createElement('div');b.className='trend-bar';b.style.height=${(l.mood/5)*100}%;b.title=${l.date}: Mood ${l.mood}/5;c.appendChild(b)})}
+function loadTodayMood(){const data=getData();const tm=data.moodLogs.find(l=>l.date===getTodayDateString());if(tm){document.getElementById('energy').value=tm.energy;document.getElementById('mood').value=tm.mood;document.getElementById('cravings').value=tm.cravings;document.getElementById('bloating').value=tm.bloating;updateSliderValues()}}
+function updateSliderValues(){document.getElementById('energyValue').textContent=document.getElementById('energy').value;document.getElementById('moodValue').textContent=document.getElementById('mood').value;document.getElementById('cravingsValue').textContent=document.getElementById('cravings').value;document.getElementById('bloatingValue').textContent=document.getElementById('bloating').value}
+// CYCLE TRACKER
+let currentCalendarDate=new Date();
+function renderPatternCard(){const data=getData();const cl=getCycleLengths(data.cycleLogs);const pl=getPeriodLengths(data.cycleLogs);const a=document.getElementById('avgCycleLength');const r=document.getElementById('cycleRange');const p=document.getElementById('avgPeriodLength');const m=document.getElementById('patternMessage');if(cl.length===0){a.textContent='--';r.textContent='--';p.textContent=pl.length>0?Math.round(pl.reduce((x,y)=>x+y,0)/pl.length):'--';m.textContent='Start logging to discover your unique pattern. Every body is different. 💛';return}const avg=Math.round(cl.reduce((s,c)=>s+c.length,0)/cl.length);const min=Math.min(...cl.map(c=>c.length));const max=Math.max(...cl.map(c=>c.length));const ap=pl.length>0?Math.round(pl.reduce((x,y)=>x+y,0)/pl.length):'--';a.textContent=avg;r.textContent=${min}-${max};p.textContent=ap;const v=max-min;if(cl.length===1)m.textContent='You've logged one cycle. Keep going. 🌱';else if(v<=5)m.textContent='Your cycles are fairly consistent. Wonderful — and it's okay if they shift. 🌸';else if(v<=10)m.textContent='Some variation is normal, especially with PCOS. 💛';else m.textContent='PCOS cycles can vary widely — this is normal for you. 🌙'}
+function renderCalendar(){const data=getData();const y=currentCalendarDate.getFullYear();const mo=currentCalendarDate.getMonth();const names=['January','February','March','April','May','June','July','August','September','October','November','December'];document.getElementById('calendarMonth').textContent=${names[mo]} ${y};const fd=new Date(y,mo,1).getDay();const dim=new Date(y,mo+1,0).getDate();const today=getTodayDateString();const g=document.getElementById('calendarGrid');g.innerHTML='';for(let i=0;i<fd;i++){const e=document.createElement('div');e.className='calendar-day empty';g.appendChild(e)}for(let d=1;d<=dim;d++){const ds=${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')};const b=document.createElement('button');b.className='calendar-day';b.dataset.date=ds;const pl=data.cycleLogs.find(l=>l.date===ds&&l.type==='period');if(pl){b.classList.add('has-period');if(pl.flow)b.classList.add(pl.flow)}const sl=data.cycleLogs.find(l=>l.date===ds&&l.symptoms);if(ds===today)b.classList.add('today');const dn=document.createElement('span');dn.textContent=d;b.appendChild(dn);if(sl&&sl.symptoms){const ind=document.createElement('div');ind.className='day-indicators';const s=sl.symptoms;if(s.cramps>0){const dot=document.createElement('div');dot.className='symptom-dot';dot.style.background='var(--secondary)';ind.appendChild(dot)}if(s.bloating>0){const dot=document.createElement('div');dot.className='symptom-dot';dot.style.background='var(--accent)';ind.appendChild(dot)}if(s.fatigue>0){const dot=document.createElement('div');dot.className='symptom-dot';dot.style.background='var(--primary)';ind.appendChild(dot)}if(ind.children.length>0)b.appendChild(ind)}b.addEventListener('click',()=>openDayModal(ds));g.appendChild(b)}}
+function renderCycleChart(){const data=getData();const cl=getCycleLengths(data.cycleLogs).slice(-6);const c=document.getElementById('cycleChartContainer');if(cl.length<2){c.innerHTML='<div class="no-data-message">Log at least 2 cycles 🌱</div>';return}const mx=Math.max(...cl.map(x=>x.length));let h='<div class="cycle-chart">';cl.forEach((x,i)=>{const hp=(x.length/mx)*100;h+=<div class="cycle-bar-wrapper"><div class="cycle-bar" style="height:${hp}%"><div class="cycle-bar-value">${x.length}</div></div><div class="cycle-bar-label">C${i+1}</div></div>});h+='</div>';c.innerHTML=h}
+function renderInsights(){const data=getData();const c=document.getElementById('insightsContainer');const ins=[];if(data.cycleLogs.length===0){c.innerHTML='<div class="insight-card"><div class="insight-title">💡 Getting Started</div><div class="insight-text">As you log more days, you'll see your patterns emerge. 🌸</div></div>';return}const sl=data.cycleLogs.filter(l=>l.symptoms);if(sl.length>=3){const sa={};Object.keys(SYMPTOM_LABELS).forEach(k=>{const v=sl.map(l=>l.symptoms[k]||0);sa[k]=v.reduce((a,b)=>a+b,0)/v.length});const mc=Object.entries(sa).filter(([_,v])=>v>1).sort((a,b)=>b[1]-a[1])[0];if(mc)ins.push({icon:'🔍',title:'Common Symptom',text:"${SYMPTOM_LABELS[mc[0]]}" tends to be frequent. Knowing this helps you prepare.})}const ml=data.cycleLogs.filter(l=>l.mood);if(ml.length>=3){const mc={};ml.forEach(l=>{mc[l.mood]=(mc[l.mood]||0)+1});const dm=Object.entries(mc).sort((a,b)=>b[1]-a[1])[0];if(dm)ins.push({icon:'💭',title:'Mood Pattern',text:"${dm[0].charAt(0).toUpperCase()+dm[0].slice(1)}" has been most common. All feelings are valid.})}const dl=new Set(data.cycleLogs.map(l=>l.date)).size;if(dl>=7)ins.push({icon:'✨',title:'Great Consistency',text:You've logged ${dl} days — beautiful self-awareness.});if(ins.length===0)ins.push({icon:'🌱',title:'Patterns Emerging',text:'Keep logging! The more data, the more personalized insights.'});c.innerHTML=ins.map(i=><div class="insight-card"><div class="insight-title">${i.icon} ${i.title}</div><div class="insight-text">${i.text}</div></div>).join('')}
+// Day Modal (Cycle)
+function openDayModal(dateStr){const data=getData();const el=data.cycleLogs.find(l=>l.date===dateStr);const o=document.createElement('div');o.className='modal-overlay';o.id='dayModalOverlay';const df=new Date(dateStr+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});if(el)o.innerHTML=renderExistingLogModal(dateStr,df,el);else o.innerHTML=renderNewLogModal(dateStr,df);document.body.appendChild(o);o.addEventListener('click',e=>{if(e.target===o)closeModal()});const cb=o.querySelector('.close-btn');if(cb)cb.addEventListener('click',closeModal);if(!el)setupNewLogHandlers(dateStr);else setupEditHandlers(dateStr,el)}
+function renderNewLogModal(dateStr,df){const it=dateStr===getTodayDateString();return<div class="day-modal"><div class="modal-header"><h2>${it?'Today':df}</h2><button class="close-btn">×</button></div><div class="tab-container"><button class="tab-btn active" data-tab="quick">Quick Log</button><button class="tab-btn" data-tab="detailed">Detailed</button></div><div class="tab-content active" id="quickTab"><p style="font-size:14px;color:var(--text-light);margin-bottom:var(--spacing-md)">Is this a period day?</p><div class="flow-selector"><button class="flow-option" data-flow="light"><div class="flow-option-icon">💧</div><div class="flow-option-label">Light</div></button><button class="flow-option" data-flow="medium"><div class="flow-option-icon">💧💧</div><div class="flow-option-label">Medium</div></button><button class="flow-option" data-flow="heavy"><div class="flow-option-icon">💧💧💧</div><div class="flow-option-label">Heavy</div></button></div><button class="btn-primary" id="saveQuickLog">Save Quick Log</button></div><div class="tab-content" id="detailedTab"><div class="symptom-group"><div class="symptom-group-title">Period (optional)</div><div class="flow-selector"><button class="flow-option" data-flow="light"><div class="flow-option-icon">💧</div><div class="flow-option-label">Light</div></button><button class="flow-option" data-flow="medium"><div class="flow-option-icon">💧💧</div><div class="flow-option-label">Medium</div></button><button class="flow-option" data-flow="heavy"><div class="flow-option-icon">💧💧💧</div><div class="flow-option-label">Heavy</div></button></div></div><div class="symptom-group"><div class="symptom-group-title">Physical Symptoms</div>${renderSymptomSlider('cramps','Cramps 😣')}${renderSymptomSlider('bloating','Bloating 💨')}${renderSymptomSlider('fatigue','Fatigue 😴')}${renderSymptomSlider('headache','Headache 🤕')}${renderSymptomSlider('acne','Acne 😖')}${renderSymptomSlider('breastTenderness','Breast Tenderness')}</div><div class="symptom-group"><div class="symptom-group-title">Emotional & Energy</div><div class="select-group"><label class="select-label">Mood</label><select id="moodSelect"><option value="">—</option><option value="sad">Sad</option><option value="neutral">Neutral</option><option value="happy">Happy</option><option value="anxious">Anxious</option></select></div><div class="select-group"><label class="select-label">Energy</label><select id="energySelect"><option value="">—</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="select-group"><label class="select-label">Sleep</label><select id="sleepSelect"><option value="">—</option><option value="poor">Poor</option><option value="fair">Fair</option><option value="good">Good</option></select></div></div><div class="symptom-group"><div class="symptom-group-title">Other</div><div class="select-group"><label class="select-label">Cravings</label><select id="cravingsSelect"><option value="none">None</option><option value="sweet">Sweet</option><option value="salty">Salty</option><option value="both">Both</option></select></div><div class="select-group"><label class="select-label">Digestion</label><select id="digestionSelect"><option value="normal">Normal</option><option value="bloated">Bloated</option><option value="constipated">Constipated</option><option value="diarrhea">Diarrhea</option></select></div><div class="select-group"><label class="select-label">Notes</label><textarea id="notesInput" placeholder="How are you feeling?"></textarea></div></div><button class="btn-primary" id="saveDetailedLog">Save Detailed Log</button></div></div>}
+function renderSymptomSlider(k,l){return<div class="symptom-item"><div class="symptom-label"><span>${l}</span><span class="symptom-value" id="val-${k}">0</span></div><input type="range" class="symptom-slider" data-symptom="${k}" min="0" max="5" value="0"></div>}
+function renderExistingLogModal(dateStr,df,log){const ip=log.type==='period';const hs=log.symptoms&&Object.values(log.symptoms).some(v=>v>0);let sh='';if(hs){const p=Object.entries(log.symptoms).filter(([_,v])=>v>0).map(([k,v])=><div class="symptom-pill"><span>${SYMPTOM_LABELS[k]}</span><span class="symptom-pill-severity">${v}/5</span></div>).join('');sh=<div class="day-view-section"><h4>Physical Symptoms</h4><div class="symptom-pills">${p}</div></div>}let eh='';const ei=[];if(log.mood)ei.push(<div class="symptom-pill"><span>Mood:</span> <strong>${log.mood}</strong></div>);if(log.energy)ei.push(<div class="symptom-pill"><span>Energy:</span> <strong>${log.energy}</strong></div>);if(log.sleep)ei.push(<div class="symptom-pill"><span>Sleep:</span> <strong>${log.sleep}</strong></div>);if(ei.length>0)eh=<div class="day-view-section"><h4>How You Felt</h4><div class="symptom-pills">${ei.join('')}</div></div>;let oh='';const oi=[];if(log.cravings&&log.cravings!=='none')oi.push(<div class="symptom-pill"><span>Cravings:</span> <strong>${log.cravings}</strong></div>);if(log.digestion&&log.digestion!=='normal')oi.push(<div class="symptom-pill"><span>Digestion:</span> <strong>${log.digestion}</strong></div>);if(oi.length>0)oh=<div class="day-view-section"><h4>Other</h4><div class="symptom-pills">${oi.join('')}</div></div>;let nh='';if(log.notes)nh=<div class="day-view-section"><h4>Notes</h4><div class="notes-display">${log.notes}</div></div>;const cd=getCycleDayForDate(dateStr,getData().cycleLogs);const cdh=cd?<p style="color:var(--primary-dark);font-weight:600;font-size:14px">Cycle Day ${cd}</p>:'';return<div class="day-modal"><div class="modal-header"><div><h2>${df}</h2>${cdh}</div><button class="close-btn">×</button></div>${ip?<div class="day-view-section"><h4>Period Day 🌸</h4><div class="symptom-pills"><div class="symptom-pill" style="background:var(--period-light)"><span>Flow:</span> <strong>{log.flow||'not specified'}</strong></div></div></div>`:''}{sh}
+e
+h
+eh{oh}{nh}<button class="btn-primary" id="editLogBtn">Edit This Day</button><button class="delete-btn" id="deleteLogBtn">Delete This Entry</button></div>`}
+function setupNewLogHandlers(dateStr){const o=document.getElementById('dayModalOverlay');let sf=null;o.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{o.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));o.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));b.classList.add('active');o.querySelector(`#{b.dataset.tab}Tab).classList.add('active')})});o.querySelectorAll('.flow-option').forEach(op=>{op.addEventListener('click',()=>{op.parentElement.querySelectorAll('.flow-option').forEach(x=>x.classList.remove('selected'));op.classList.add('selected');sf=op.dataset.flow;o.querySelectorAll(.flow-option[data-flow="{sf}"]`).forEach(x=>{x.parentElement.querySelectorAll('.flow-option').forEach(y=>y.classList.remove('selected'));x.classList.add('selected')})})});o.querySelectorAll('.symptom-slider').forEach(s=>{s.addEventListener('input',()=>{o.querySelector(`#val-{s.dataset.symptom}).textContent=s.value})});o.querySelector('#saveQuickLog').addEventListener('click',()=>{const d=getData();const e={date:dateStr,type:sf?'period':'symptom'};if(sf)e.flow=sf;d.cycleLogs=d.cycleLogs.filter(l=>l.date!==dateStr);d.cycleLogs.push(e);d.cycleLogs.sort((a,b)=>a.date.localeCompare(b.date));saveData(d);closeModal();refreshCycleSection();showToast(sf?'🌸 Period logged':'✓ Day logged')});o.querySelector('#saveDetailedLog').addEventListener('click',()=>{const d=getData();const e={date:dateStr,type:sf?'period':'symptom'};if(sf)e.flow=sf;const sy={};o.querySelectorAll('.symptom-slider').forEach(s=>{sy[s.dataset.symptom]=parseInt(s.value)});e.symptoms=sy;e.mood=o.querySelector('#moodSelect').value||null;e.energy=o.querySelector('#energySelect').value||null;e.sleep=o.querySelector('#sleepSelect').value||null;e.cravings=o.querySelector('#cravingsSelect').value;e.digestion=o.querySelector('#digestionSelect').value;e.notes=o.querySelector('#notesInput').value.trim()||null;d.cycleLogs=d.cycleLogs.filter(l=>l.date!==dateStr);d.cycleLogs.push(e);d.cycleLogs.sort((a,b)=>a.date.localeCompare(b.date));saveData(d);closeModal();refreshCycleSection();showToast('✓ Detailed log saved')})} function setupEditHandlers(dateStr,el){const o=document.getElementById('dayModalOverlay');o.querySelector('#editLogBtn').addEventListener('click',()=>{closeModal();openEditModal(dateStr,el)});o.querySelector('#deleteLogBtn').addEventListener('click',()=>{if(confirm('Delete this entry?')){const d=getData();d.cycleLogs=d.cycleLogs.filter(l=>l.date!==dateStr);saveData(d);closeModal();refreshCycleSection();showToast('Entry deleted')}})} function openEditModal(dateStr,el){const o=document.createElement('div');o.className='modal-overlay';o.id='dayModalOverlay';const df=new Date(dateStr+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});o.innerHTML=<div class="day-modal"><div class="modal-header"><h2>Edit 
+d
+f
+<
+/
+h
+2
+>
+<
+b
+u
+t
+t
+o
+n
+c
+l
+a
+s
+s
+=
+"
+c
+l
+o
+s
+e
+−
+b
+t
+n
+"
+>
+×
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+s
+y
+m
+p
+t
+o
+m
+−
+g
+r
+o
+u
+p
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+s
+y
+m
+p
+t
+o
+m
+−
+g
+r
+o
+u
+p
+−
+t
+i
+t
+l
+e
+"
+>
+P
+e
+r
+i
+o
+d
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+s
+e
+l
+e
+c
+t
+o
+r
+"
+>
+<
+b
+u
+t
+t
+o
+n
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+"
+d
+a
+t
+a
+−
+f
+l
+o
+w
+=
+"
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+i
+c
+o
+n
+"
+>
+✖️
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+l
+a
+b
+e
+l
+"
+>
+N
+o
+n
+e
+<
+/
+d
+i
+v
+>
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+b
+u
+t
+t
+o
+n
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+"
+d
+a
+t
+a
+−
+f
+l
+o
+w
+=
+"
+l
+i
+g
+h
+t
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+i
+c
+o
+n
+"
+>
+💧
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+l
+a
+b
+e
+l
+"
+>
+L
+i
+g
+h
+t
+<
+/
+d
+i
+v
+>
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+b
+u
+t
+t
+o
+n
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+"
+d
+a
+t
+a
+−
+f
+l
+o
+w
+=
+"
+m
+e
+d
+i
+u
+m
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+i
+c
+o
+n
+"
+>
+💧💧
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+l
+a
+b
+e
+l
+"
+>
+M
+e
+d
+i
+u
+m
+<
+/
+d
+i
+v
+>
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+b
+u
+t
+t
+o
+n
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+"
+d
+a
+t
+a
+−
+f
+l
+o
+w
+=
+"
+h
+e
+a
+v
+y
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+i
+c
+o
+n
+"
+>
+💧💧💧
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+f
+l
+o
+w
+−
+o
+p
+t
+i
+o
+n
+−
+l
+a
+b
+e
+l
+"
+>
+H
+e
+a
+v
+y
+<
+/
+d
+i
+v
+>
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+/
+d
+i
+v
+>
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+s
+y
+m
+p
+t
+o
+m
+−
+g
+r
+o
+u
+p
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+s
+y
+m
+p
+t
+o
+m
+−
+g
+r
+o
+u
+p
+−
+t
+i
+t
+l
+e
+"
+>
+P
+h
+y
+s
+i
+c
+a
+l
+S
+y
+m
+p
+t
+o
+m
+s
+<
+/
+d
+i
+v
+>
+df</h2><buttonclass="close−btn">×</button></div><divclass="symptom−group"><divclass="symptom−group−title">Period</div><divclass="flow−selector"><buttonclass="flow−option"data−flow=""><divclass="flow−option−icon">✖️</div><divclass="flow−option−label">None</div></button><buttonclass="flow−option"data−flow="light"><divclass="flow−option−icon">💧</div><divclass="flow−option−label">Light</div></button><buttonclass="flow−option"data−flow="medium"><divclass="flow−option−icon">💧💧</div><divclass="flow−option−label">Medium</div></button><buttonclass="flow−option"data−flow="heavy"><divclass="flow−option−icon">💧💧💧</div><divclass="flow−option−label">Heavy</div></button></div></div><divclass="symptom−group"><divclass="symptom−group−title">PhysicalSymptoms</div>{renderSymptomSlider('cramps','Cramps')}
+r
+e
+n
+d
+e
+r
+S
+y
+m
+p
+t
+o
+m
+S
+l
+i
+d
+e
+r
+(
+′
+b
+l
+o
+a
+t
+i
+n
+g
+′
+,
+′
+B
+l
+o
+a
+t
+i
+n
+g
+′
+)
+renderSymptomSlider( 
+′
+ bloating 
+′
+ , 
+′
+ Bloating 
+′
+ ){renderSymptomSlider('fatigue','Fatigue')}
+r
+e
+n
+d
+e
+r
+S
+y
+m
+p
+t
+o
+m
+S
+l
+i
+d
+e
+r
+(
+′
+h
+e
+a
+d
+a
+c
+h
+e
+′
+,
+′
+H
+e
+a
+d
+a
+c
+h
+e
+′
+)
+renderSymptomSlider( 
+′
+ headache 
+′
+ , 
+′
+ Headache 
+′
+ ){renderSymptomSlider('acne','Acne')}{renderSymptomSlider('breastTenderness','Breast Tenderness')}</div><div class="symptom-group"><div class="symptom-group-title">Emotional & Energy</div><div class="select-group"><label class="select-label">Mood</label><select id="moodSelect"><option value="">—</option><option value="sad">Sad</option><option value="neutral">Neutral</option><option value="happy">Happy</option><option value="anxious">Anxious</option></select></div><div class="select-group"><label class="select-label">Energy</label><select id="energySelect"><option value="">—</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="select-group"><label class="select-label">Sleep</label><select id="sleepSelect"><option value="">—</option><option value="poor">Poor</option><option value="fair">Fair</option><option value="good">Good</option></select></div></div><div class="symptom-group"><div class="symptom-group-title">Other</div><div class="select-group"><label class="select-label">Cravings</label><select id="cravingsSelect"><option value="none">None</option><option value="sweet">Sweet</option><option value="salty">Salty</option><option value="both">Both</option></select></div><div class="select-group"><label class="select-label">Digestion</label><select id="digestionSelect"><option value="normal">Normal</option><option value="bloated">Bloated</option><option value="constipated">Constipated</option><option value="diarrhea">Diarrhea</option></select></div><div class="select-group"><label class="select-label">Notes</label><textarea id="notesInput"></textarea></div></div><button class="btn-primary" id="saveEditBtn">Save Changes</button></div>`;document.body.appendChild(o);o.addEventListener('click',e=>{if(e.target===o)closeModal()});o.querySelector('.close-btn').addEventListener('click',closeModal);if(el.flow){const fb=o.querySelector(`.flow-option[data-flow="{el.flow}"]);if(fb)fb.classList.add('selected')}else o.querySelector('.flow-option[data-flow=""]').classList.add('selected');if(el.symptoms)Object.entries(el.symptoms).forEach(([k,v])=>{const s=o.querySelector([data-symptom="{k}"]`);if(s){s.value=v;o.querySelector(`#val-{k}).textContent=v}});if(el.mood)o.querySelector('#moodSelect').value=el.mood;if(el.energy)o.querySelector('#energySelect').value=el.energy;if(el.sleep)o.querySelector('#sleepSelect').value=el.sleep;if(el.cravings)o.querySelector('#cravingsSelect').value=el.cravings;if(el.digestion)o.querySelector('#digestionSelect').value=el.digestion;if(el.notes)o.querySelector('#notesInput').value=el.notes;let sf=el.flow||'';o.querySelectorAll('.flow-option').forEach(op=>{op.addEventListener('click',()=>{o.querySelectorAll('.flow-option').forEach(x=>x.classList.remove('selected'));op.classList.add('selected');sf=op.dataset.flow})});o.querySelectorAll('.symptom-slider').forEach(s=>{s.addEventListener('input',()=>{o.querySelector(#val-${s.dataset.symptom}`).textContent=s.value})});o.querySelector('#saveEditBtn').addEventListener('click',()=>{const d=getData();const e={date:dateStr,type:sf?'period':'symptom'};if(sf)e.flow=sf;const sy={};o.querySelectorAll('.symptom-slider').forEach(s=>{sy[s.dataset.symptom]=parseInt(s.value)});e.symptoms=sy;e.mood=o.querySelector('#moodSelect').value||null;e.energy=o.querySelector('#energySelect').value||null;e.sleep=o.querySelector('#sleepSelect').value||null;e.cravings=o.querySelector('#cravingsSelect').value;e.digestion=o.querySelector('#digestionSelect').value;e.notes=o.querySelector('#notesInput').value.trim()||null;d.cycleLogs=d.cycleLogs.filter(l=>l.date!==dateStr);d.cycleLogs.push(e);d.cycleLogs.sort((a,b)=>a.date.localeCompare(b.date));saveData(d);closeModal();refreshCycleSection();showToast('✓ Updated')})}
+function closeModal(){const o=document.getElementById('dayModalOverlay');if(o)o.remove()}
+function refreshCycleSection(){renderPatternCard();renderCalendar();renderCycleChart();renderInsights();renderStats()}
+// WORKOUTS
+let currentWorkoutFilter='all';
+let currentWorkoutSearch='';
+function getSmartWorkoutSuggestion(){const d=getData();const tm=d.moodLogs.find(l=>l.date===getTodayDateString());const e=tm?tm.energy:3;const ph=getCurrentCyclePhase(d.cycleLogs);const h=new Date().getHours();const rw=d.workoutHistory.slice(-3).map(w=>w.workoutId);let c=WORKOUT_LIBRARY.filter(w=>!rw.includes(w.id));if(c.length===0)c=WORKOUT_LIBRARY;let s=null,r='';if(e<=2){s=c.find(w=>w.category==='fatigue')||c[0];r='Low energy today — let's be gentle'}else if(ph){const pw=c.filter(w=>w.phase===ph);if(pw.length>0){s=pw[Math.floor(Math.random()*pw.length)];const pn={menstrual:'menstrual 🌙',follicular:'follicular 🌱',ovulatory:'ovulatory 🌟',luteal:'luteal 🍂'};r=You're in your ${pn[ph]} phase}}if(!s&&e>=4&&h<12){s=c.find(w=>w.category==='insulin')||c[0];r='Morning energy is perfect for insulin sensitivity'}if(!s&&h>=12&&h<18){s=c.find(w=>w.category==='joint'||w.category==='insulin')||c[0];r='Mid-day movement boosts energy'}if(!s){s=c[Math.floor(Math.random()*c.length)];r='Variety keeps your body guessing'}return{workout:s,reason:r}}
+function renderTodaySuggestion(){const s=getSmartWorkoutSuggestion();const w=s.workout;document.getElementById('suggestionTitle').textContent=w.name;document.getElementById('suggestionReason').textContent=s.reason;document.getElementById('suggestionMeta').innerHTML=<span>⏱️ ${w.duration} min</span><span>📊 ${w.difficulty}</span><span>${w.emoji}</span>;document.getElementById('todaySuggestion').onclick=()=>openWorkoutPlayer(w.id)}
+function renderWorkoutLibrary(){const g=document.getElementById('workoutGrid');let w=WORKOUT_LIBRARY;if(currentWorkoutFilter!=='all')w=w.filter(x=>x.category===currentWorkoutFilter);if(currentWorkoutSearch){const s=currentWorkoutSearch.toLowerCase();w=w.filter(x=>x.name.toLowerCase().includes(s)||x.benefits.toLowerCase().includes(s))}if(w.length===0){g.innerHTML='<div class="empty-state"><div class="empty-state-emoji">🔍</div><h3>No workouts found</h3></div>';return}const d=getData();g.innerHTML=w.map(x=>renderWorkoutCard(x,d.favorites.workouts.includes(x.id))).join('');g.querySelectorAll('.workout-card').forEach(c=>{c.querySelector('.start-btn').addEventListener('click',e=>{e.stopPropagation();openWorkoutPlayer(c.dataset.workoutId)});c.querySelector('.favorite-btn').addEventListener('click',e=>{e.stopPropagation();toggleFavorite(c.dataset.workoutId)});c.addEventListener('click',()=>openWorkoutPlayer(c.dataset.workoutId))})}
+function renderWorkoutCard(w,isFav){const cl={insulin:'Insulin-Sensitizing',fatigue:'Fatigue-Friendly',joint:'Joint-Friendly',cycle:'Cycle-Synced'};return<div class="workout-card" data-workout-id="${w.id}"><div class="workout-card-header"><div class="workout-emoji">${w.emoji}</div><div class="workout-info"><div class="workout-name">${w.name}</div><div class="workout-benefits">${w.benefits}</div></div><button class="favorite-btn ${isFav?'active':''}" title="Favorite">${isFav?'♥':'♡'}</button></div><div class="workout-badges"><span class="badge badge-duration">⏱️ ${w.duration} min</span><span class="badge badge-difficulty">📊 ${w.difficulty}</span><span class="badge badge-category">${cl[w.category]}</span></div><button class="start-btn">Start Workout →</button></div>}
+function renderFavorites(){const d=getData();const g=document.getElementById('favoritesGrid');const fw=WORKOUT_LIBRARY.filter(w=>d.favorites.workouts.includes(w.id));if(fw.length===0){g.innerHTML='<div class="empty-state"><div class="empty-state-emoji">💝</div><h3>No favorites yet</h3><p>Tap the heart on any workout</p></div>';return}g.innerHTML=fw.map(w=>renderWorkoutCard(w,true)).join('');g.querySelectorAll('.workout-card').forEach(c=>{c.querySelector('.start-btn').addEventListener('click',e=>{e.stopPropagation();openWorkoutPlayer(c.dataset.workoutId)});c.querySelector('.favorite-btn').addEventListener('click',e=>{e.stopPropagation();toggleFavorite(c.dataset.workoutId)});c.addEventListener('click',()=>openWorkoutPlayer(c.dataset.workoutId))})}
+function renderHistory(){const d=getData();const h=d.workoutHistory||[];document.getElementById('totalWorkouts').textContent=h.length;document.getElementById('currentStreak').textContent=calculateWorkoutStreak();const t=new Date();const ws=new Date(t);ws.setDate(t.getDate()-t.getDay());ws.setHours(0,0,0,0);const wc=h.filter(x=>new Date(x.date+'T00:00:00')>=ws).length;document.getElementById('thisWeek').textContent=wc;const l=document.getElementById('historyList');if(h.length===0){l.innerHTML='<div class="empty-state"><div class="empty-state-emoji">📝</div><h3>No workouts yet</h3></div>';return}l.innerHTML=h.slice().reverse().slice(0,20).map(x=>{const w=WORKOUT_LIBRARY.find(y=>y.id===x.workoutId);if(!w)return'';const df=new Date(x.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});return<div class="history-item"><div class="history-emoji">${w.emoji}</div><div class="history-info"><div class="history-name">${w.name}</div><div class="history-date">${df} • ${x.duration||w.duration} min</div>${x.notes?<div class="history-notes">"${x.notes}"</div>:''}</div></div>}).join('')}
+function calculateWorkoutStreak(){const d=getData();const h=d.workoutHistory||[];if(h.length===0)return 0;const ds=new Set(h.map(x=>x.date));let s=0;const t=new Date();for(let i=0;i<365;i++){const cd=new Date(t);cd.setDate(t.getDate()-i);const dstr=cd.toISOString().split('T')[0];if(ds.has(dstr))s++;else if(i>0)break}return s}
+function toggleFavorite(id){const d=getData();if(!d.favorites.workouts)d.favorites.workouts=[];const i=d.favorites.workouts.indexOf(id);if(i>=0){d.favorites.workouts.splice(i,1);showToast('Removed from favorites')}else{d.favorites.workouts.push(id);showToast('♥ Added to favorites')}saveData(d);renderWorkoutLibrary();renderFavorites()}
+// Workout Player
+let playerState={workout:null,queue:[],currentIndex:0,timeRemaining:0,isPaused:false,intervalId:null,startTime:null};
+function buildWorkoutQueue(w){const q=[];w.warmup.forEach(e=>q.push({type:'warmup',data:e,duration:e.duration}));w.exercises.forEach((e,i)=>{q.push({type:'exercise',data:e,duration:e.duration});if(e.rest>0&&i<w.exercises.length-1)q.push({type:'rest',data:{name:'Rest',emoji:'😌',cues:'Breathe, recover'},duration:e.rest})});w.cooldown.forEach(e=>q.push({type:'cooldown',data:e,duration:e.duration}));return q}
+function openWorkoutPlayer(id){const w=WORKOUT_LIBRARY.find(x=>x.id===id);if(!w)return;playerState={workout:w,queue:buildWorkoutQueue(w),currentIndex:0,timeRemaining:0,isPaused:false,intervalId:null,startTime:Date.now()};renderPlayer();startPlayerTimer()}
+function renderPlayer(){const e=document.querySelector('.player-overlay');if(e)e.remove();const o=document.createElement('div');o.className='player-overlay';o.id='playerOverlay';const ci=playerState.queue[playerState.currentIndex];const pp=(playerState.currentIndex/playerState.queue.length)100;const pl={warmup:'🌅 Warm-up',exercise:'💪 Main Workout',rest:'😌 Rest',cooldown:'🌙 Cool-down'};const d=ci.data;const em=d.emoji||(ci.type==='rest'?'😌':'✨');const r=90;const c=2Math.PIr;const tp=playerState.timeRemaining/ci.duration;const dof=c(1-tp);const m=Math.floor(playerState.timeRemaining/60);const s=playerState.timeRemaining%60;const td=${m}:${String(s).padStart(2,'0')};let mh='';if(d.modifications&&ci.type==='exercise')mh=<div class="player-modifications"><div class="player-modifications-label">Modifications</div><div class="player-mod-text">${d.modifications.easier?• Easier: {d.modifications.easier}<br>`:''}{d.modifications.harder?• Harder: ${d.modifications.harder}:''}</div></div>;let sw='';if(d.skipIfFatigued&&ci.type==='exercise')sw='<p style="font-size:12px;color:var(--accent-dark);margin-top:8px;font-style:italic">💛 Skip if fatigued</p>';o.innerHTML=<div class="player-header"><div class="player-title">
+p
+l
+a
+y
+e
+r
+S
+t
+a
+t
+e
+.
+w
+o
+r
+k
+o
+u
+t
+.
+e
+m
+o
+j
+i
+playerState.workout.emoji{playerState.workout.name}</div><button class="player-close" id="playerCloseBtn">×</button></div><div class="player-progress"><div class="player-progress-bar" style="width:${pp}%"></div></div><div class="player-body"><div class="player-phase">
+p
+l
+[
+c
+i
+.
+t
+y
+p
+e
+]
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+p
+l
+a
+y
+e
+r
+−
+e
+x
+e
+r
+c
+i
+s
+e
+−
+e
+m
+o
+j
+i
+"
+>
+pl[ci.type]</div><divclass="player−exercise−emoji">{em}</div><div class="player-exercise-name">
+d
+.
+n
+a
+m
+e
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+p
+l
+a
+y
+e
+r
+−
+t
+i
+m
+e
+r
+−
+c
+o
+n
+t
+a
+i
+n
+e
+r
+"
+>
+<
+s
+v
+g
+c
+l
+a
+s
+s
+=
+"
+p
+l
+a
+y
+e
+r
+−
+t
+i
+m
+e
+r
+−
+s
+v
+g
+"
+v
+i
+e
+w
+B
+o
+x
+=
+"
+00200200
+"
+>
+<
+c
+i
+r
+c
+l
+e
+c
+l
+a
+s
+s
+=
+"
+p
+l
+a
+y
+e
+r
+−
+t
+i
+m
+e
+r
+−
+b
+g
+"
+c
+x
+=
+"
+100
+"
+c
+y
+=
+"
+100
+"
+r
+=
+"
+d.name</div><divclass="player−timer−container"><svgclass="player−timer−svg"viewBox="00200200"><circleclass="player−timer−bg"cx="100"cy="100"r="{r}"/><circle class="player-timer-progress" cx="100" cy="100" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${dof}"/></svg><div class="player-timer-text">
+t
+d
+<
+/
+d
+i
+v
+>
+<
+/
+d
+i
+v
+>
+td</div></div>{d.cues?<div class="player-cues"><div class="player-cues-label">Form Cues</div><div class="player-cues-text">${d.cues}</div></div>:''}
+m
+h
+mh{sw}<p style="font-size:12px;color:var(--text-light);margin-top:16px">Exercise 
+p
+l
+a
+y
+e
+r
+S
+t
+a
+t
+e
+.
+c
+u
+r
+r
+e
+n
+t
+I
+n
+d
+e
+x
++
+1
+o
+f
+playerState.currentIndex+1of{playerState.queue.length}</p></div><div class="player-controls"><button class="player-btn player-btn-secondary" id="prevBtn">⏮️</button><button class="player-btn player-btn-primary" id="pauseBtn">{playerState.isPaused?'▶️ Resume':'⏸️ Pause'}</button><button class="player-btn player-btn-secondary" id="skipBtn">⏭️</button></div>`;document.body.appendChild(o);document.getElementById('playerCloseBtn').addEventListener('click',closePlayer);document.getElementById('pauseBtn').addEventListener('click',togglePause);document.getElementById('skipBtn').addEventListener('click',skipExercise);document.getElementById('prevBtn').addEventListener('click',previousExercise)}
+function startPlayerTimer(){const ci=playerState.queue[playerState.currentIndex];if(!ci){completeWorkout();return}if(playerState.timeRemaining===0)playerState.timeRemaining=ci.duration;if(playerState.intervalId)clearInterval(playerState.intervalId);playerState.intervalId=setInterval(()=>{if(!playerState.isPaused){playerState.timeRemaining--;updateTimerDisplay();if(playerState.timeRemaining<=0){playerState.currentIndex++;if(playerState.currentIndex>=playerState.queue.length)completeWorkout();else{playerState.timeRemaining=0;renderPlayer()}}}},1000)}
+function updateTimerDisplay(){const ci=playerState.queue[playerState.currentIndex];if(!ci)return;const m=Math.floor(playerState.timeRemaining/60);const s=playerState.timeRemaining%60;const tt=document.querySelector('.player-timer-text');if(tt)tt.textContent=`{m}:{String(s).padStart(2,'0')}`;const r=90;const c=2*Math.PI*r;const tp=playerState.timeRemaining/ci.duration;const dof=c*(1-tp);const p=document.querySelector('.player-timer-progress');if(p)p.setAttribute('stroke-dashoffset',dof)}
+function togglePause(){playerState.isPaused=!playerState.isPaused;const b=document.getElementById('pauseBtn');if(b)b.innerHTML=playerState.isPaused?'▶️ Resume':'⏸️ Pause'}
+function skipExercise(){playerState.currentIndex++;if(playerState.currentIndex>=playerState.queue.length)completeWorkout();else{playerState.timeRemaining=0;renderPlayer()}}
+function previousExercise(){if(playerState.currentIndex>0){playerState.currentIndex--;playerState.timeRemaining=0;renderPlayer()}}
+function closePlayer(){if(confirm('End this workout?')){if(playerState.intervalId)clearInterval(playerState.intervalId);const o=document.getElementById('playerOverlay');if(o)o.remove()}}
+function completeWorkout(){if(playerState.intervalId)clearInterval(playerState.intervalId);const el=Math.round((Date.now()-playerState.startTime)/1000/60);const o=document.getElementById('playerOverlay');o.innerHTML=`<div class="player-header"><div class="player-title">Workout Complete!</div><button class="player-close" id="playerCloseBtn">×</button></div><div class="player-body" style="justify-content:flex-start;padding-top:40px"><div class="completion-screen"><div class="completion-emoji">🎉</div><h2 class="completion-title">You did it!</h2><p class="completion-message">Every workout is a victory. You showed up for yourself.</p><div class="completion-stats"><div class="completion-stat"><div class="completion-stat-value">{el||playerState.workout.duration}</div><div class="completion-stat-label">Minutes</div></div><div class="completion-stat"><div class="completion-stat-value">${playerState.queue.filter(i=>i.type==='exercise').length}</div><div class="completion-stat-label">Exercises</div></div></div><textarea class="completion-notes" id="completionNotes" placeholder="How do you feel?"></textarea><button class="btn-primary" id="finishBtn" style="max-width:400px;margin:0 auto">Save & Finish</button></div></div>`;document.getElementById('playerCloseBtn').addEventListener('click',()=>{const o=document.getElementById('playerOverlay');if(o)o.remove();renderHistory();renderStats()});document.getElementById('finishBtn').addEventListener('click',()=>{const n=document.getElementById('completionNotes').value.trim();saveWorkoutCompletion(el||playerState.workout.duration,n);const o=document.getElementById('playerOverlay');if(o)o.remove();renderHistory();renderStats();renderTodaySuggestion();showToast('🎉 Workout saved!')})}
+function saveWorkoutCompletion(dur,notes){const d=getData();if(!d.workoutHistory)d.workoutHistory=[];d.workoutHistory.push({date:getTodayDateString(),workoutId:playerState.workout.id,completed:true,duration:dur,notes:notes,timestamp:new Date().toISOString()});saveData(d)}
+// QUIZ
+let quizState={currentQuestion:0,answers:{},showResults:false};
+function renderQuiz(){const c=document.getElementById('quizContainer');const d=getData();if(d.userProfile.quizCompleted&&!quizState.showResults){c.innerHTML=<div class="quiz-welcome"><div class="quiz-welcome-icon">${PCOS_PATTERNS[d.userProfile.pattern].icon}</div><h1>You've Completed the Quiz!</h1><p>Your pattern: <strong>${PCOS_PATTERNS[d.userProfile.pattern].name}</strong></p><div class="quiz-actions" style="margin-top:var(--spacing-2xl)"><button class="quiz-action-btn primary" onclick="viewQuizResults()">View Results</button><button class="quiz-action-btn secondary" onclick="retakeQuiz()">Retake Quiz</button></div></div>;return}if(quizState.showResults){renderQuizResults();return}if(quizState.currentQuestion===0&&Object.keys(quizState.answers).length===0){c.innerHTML=<div class="quiz-welcome"><div class="quiz-welcome-icon">🔍</div><h1>Discover Your PCOS Pattern</h1><p>This quiz helps you understand which functional PCOS pattern best describes your symptoms.</p><div class="quiz-disclaimer"><strong>⚠️ Important:</strong> This is for educational purposes only, not a medical diagnosis. Please consult a healthcare provider.</div><div style="display:flex;justify-content:center;gap:var(--spacing-xl);margin:var(--spacing-xl) 0;font-size:14px;color:var(--text-light)"><span>📝 ${QUIZ_QUESTIONS.length} questions</span><span>⏱️ 5-7 minutes</span></div><button class="btn-primary" onclick="startQuiz()" style="margin-top:var(--spacing-xl)">Start Quiz →</button></div>}else{const q=QUIZ_QUESTIONS[quizState.currentQuestion];const p=((quizState.currentQuestion+1)/QUIZ_QUESTIONS.length)*100;c.innerHTML=<div class="quiz-progress-container"><div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${p}%"></div></div><div class="quiz-progress-text"><span>Question ${quizState.currentQuestion+1} of ${QUIZ_QUESTIONS.length}</span><span>${Math.round(p)}%</span></div></div><div class="quiz-question-card"><div class="quiz-question-number">Question ${quizState.currentQuestion+1}</div><div class="quiz-question-text">${q.text}</div><div class="quiz-options">${q.options.map((o,i)=><button class="quiz-option ${quizState.answers[q.id]===i?'selected':''}" onclick="selectQuizOption(${i})">{o.text}</button>`).join('')}</div><div class="quiz-nav-buttons"><button class="quiz-nav-btn back" onclick="previousQuestion()" {quizState.currentQuestion===0?'disabled':''}>← Back</button><button class="quiz-nav-btn next" onclick="nextQuestion()" 
+q
+u
+i
+z
+S
+t
+a
+t
+e
+.
+a
+n
+s
+w
+e
+r
+s
+[
+q
+.
+i
+d
+]
+=
+=
+=
+u
+n
+d
+e
+f
+i
+n
+e
+d
+?
+′
+d
+i
+s
+a
+b
+l
+e
+d
+′
+:
+′
+′
+>
+quizState.answers[q.id]===undefined? 
+′
+ disabled 
+′
+ : 
+′′
+ >{quizState.currentQuestion===QUIZ_QUESTIONS.length-1?'See Results':'Next →'}</button></div></div>}} function startQuiz(){quizState={currentQuestion:0,answers:{},showResults:false};renderQuiz()} function selectQuizOption(i){const q=QUIZ_QUESTIONS[quizState.currentQuestion];quizState.answers[q.id]=i;renderQuiz()} function nextQuestion(){if(quizState.currentQuestion<QUIZ_QUESTIONS.length-1){quizState.currentQuestion++;renderQuiz()}else calculateQuizResults()} function previousQuestion(){if(quizState.currentQuestion>0){quizState.currentQuestion--;renderQuiz()}} function calculateQuizResults(){const sc={insulin:0,inflammatory:0,adrenal:0,brainHormone:0};QUIZ_QUESTIONS.forEach(q=>{const ai=quizState.answers[q.id];if(ai!==undefined){const o=q.options[ai];Object.entries(o.scores).forEach(([p,s])=>{sc[p]+=s})}});const ts=Object.values(sc).reduce((a,b)=>a+b,0);const pc={};Object.entries(sc).forEach(([p,s])=>{pc[p]=ts>0?Math.round((s/ts)*100):0});const pp=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];const d=getData();d.userProfile.pattern=pp;d.userProfile.patternScores=pc;d.userProfile.quizDate=getTodayDateString();d.userProfile.quizCompleted=true;saveData(d);quizState.showResults=true;renderQuiz();renderHeader()} function renderQuizResults(){const c=document.getElementById('quizContainer');const d=getData();const pp=PCOS_PATTERNS[d.userProfile.pattern];const sc=d.userProfile.patternScores;const rw=pp.recommendedWorkouts.map(id=>WORKOUT_LIBRARY.find(w=>w.id===id)).filter(w=>w);c.innerHTML=<div class="quiz-results"><div class="results-header"><div class="results-celebration">✨</div><h1 class="results-title">Your PCOS Pattern</h1><p class="results-subtitle">Based on your responses</p></div><div class="pattern-result-card"><div class="pattern-result-icon">
+p
+p
+.
+i
+c
+o
+n
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+p
+a
+t
+t
+e
+r
+n
+−
+r
+e
+s
+u
+l
+t
+−
+n
+a
+m
+e
+"
+>
+pp.icon</div><divclass="pattern−result−name">{pp.name}</div><div class="pattern-result-description">
+p
+p
+.
+d
+e
+s
+c
+r
+i
+p
+t
+i
+o
+n
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+p
+a
+t
+t
+e
+r
+n
+−
+p
+e
+r
+c
+e
+n
+t
+a
+g
+e
+"
+>
+pp.description</div><divclass="pattern−percentage">{sc[d.userProfile.pattern]}% match</div></div><div class="score-breakdown"><h3>Your Pattern Breakdown</h3>{Object.entries(sc).map(([p,pc])=>`<div class="score-item"><div class="score-label"><span>{PCOS_PATTERNS[p].icon} 
+P
+C
+O
+S
+P
+A
+T
+T
+E
+R
+N
+S
+[
+p
+]
+.
+n
+a
+m
+e
+<
+/
+s
+p
+a
+n
+>
+<
+s
+p
+a
+n
+>
+PCOS 
+P
+​
+ ATTERNS[p].name</span><span>{pc}%</span></div><div class="score-bar"><div class="score-fill ${p}" style="width:${pc}%"></div></div></div>).join('')}</div><div class="pattern-details"><h3>${pp.icon} Understanding Your Pattern</h3><div class="detail-section"><h4>🔍 Key Characteristics</h4><ul class="detail-list">${pp.characteristics.map(x=><li>{x}</li>`).join('')}</ul></div><div class="detail-section"><h4>⚙️ What's Happening</h4><p style="font-size:14px;line-height:1.6;color:var(--text-light)">{pp.whatsHappening}</p></div><div class="detail-section"><h4>🥗 Foods to Embrace</h4><ul class="detail-list">{pp.nutrition.embrace.map(x=>`<li>{x}</li>).join('')}</ul></div><div class="detail-section"><h4>⚠️ Foods to Minimize</h4><ul class="detail-list negative">${pp.nutrition.minimize.map(x=><li>{x}</li>`).join('')}</ul></div><div class="detail-section"><h4>💪 Recommended Exercise</h4><ul class="detail-list">{pp.exercise.map(x=><li>${x}</li>).join('')}</ul></div><div class="detail-section"><h4>🌿 Lifestyle</h4><ul class="detail-list">{pp.lifestyle.map(x=>`<li>{x}</li>).join('')}</ul></div><div class="detail-section"><h4>💊 Supplements (discuss with doctor)</h4><ul class="detail-list">${pp.supplements.map(x=><li>{x}</li>`).join('')}</ul></div></div><div class="sample-day"><h3>🍽️ Sample Day</h3><div class="meal-item"><div class="meal-time">Breakfast</div><div class="meal-content">{pp.sampleDay.breakfast}</div></div><div class="meal-item"><div class="meal-time">Lunch</div><div class="meal-content">
+p
+p
+.
+s
+a
+m
+p
+l
+e
+D
+a
+y
+.
+l
+u
+n
+c
+h
+<
+/
+d
+i
+v
+>
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+i
+t
+e
+m
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+t
+i
+m
+e
+"
+>
+S
+n
+a
+c
+k
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+c
+o
+n
+t
+e
+n
+t
+"
+>
+pp.sampleDay.lunch</div></div><divclass="meal−item"><divclass="meal−time">Snack</div><divclass="meal−content">{pp.sampleDay.snack}</div></div><div class="meal-item"><div class="meal-time">Dinner</div><div class="meal-content">
+p
+p
+.
+s
+a
+m
+p
+l
+e
+D
+a
+y
+.
+d
+i
+n
+n
+e
+r
+<
+/
+d
+i
+v
+>
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+i
+t
+e
+m
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+t
+i
+m
+e
+"
+>
+E
+v
+e
+n
+i
+n
+g
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+a
+l
+−
+c
+o
+n
+t
+e
+n
+t
+"
+>
+pp.sampleDay.dinner</div></div><divclass="meal−item"><divclass="meal−time">Evening</div><divclass="meal−content">{pp.sampleDay.evening}</div></div></div><div class="recommended-workouts"><h3>💪 Recommended Workouts</h3>{rw.map(w=>`<div class="workout-recommendation" onclick="openWorkoutPlayer('{w.id}')"><div class="workout-rec-emoji">
+w
+.
+e
+m
+o
+j
+i
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+w
+o
+r
+k
+o
+u
+t
+−
+r
+e
+c
+−
+i
+n
+f
+o
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+w
+o
+r
+k
+o
+u
+t
+−
+r
+e
+c
+−
+n
+a
+m
+e
+"
+>
+w.emoji</div><divclass="workout−rec−info"><divclass="workout−rec−name">{w.name}</div><div class="workout-rec-meta">
+w
+.
+d
+u
+r
+a
+t
+i
+o
+n
+m
+i
+n
+•
+w.durationmin•{w.difficulty}</div></div></div>).join('')}</div><div class="action-plan"><h3>🎯 Your Next Steps</h3><div class="action-item"><div class="action-number">1</div><div class="action-text">Incorporate 2-3 foods from the "embrace" list daily</div></div><div class="action-item"><div class="action-number">2</div><div class="action-text">Try one recommended workout this week</div></div><div class="action-item"><div class="action-number">3</div><div class="action-text">Implement one lifestyle change</div></div><div class="action-item"><div class="action-number">4</div><div class="action-text">Track symptoms in the Cycle section</div></div><div class="action-item"><div class="action-number">5</div><div class="action-text">Discuss supplements with your doctor</div></div></div><div class="quiz-actions"><button class="quiz-action-btn primary" onclick="retakeQuiz()">Retake Quiz</button><button class="quiz-action-btn secondary" onclick="document.querySelector('.nav-item[data-section=workouts]').click()">Explore Workouts</button></div></div>}
+function viewQuizResults(){quizState.showResults=true;renderQuiz()}
+function retakeQuiz(){quizState={currentQuestion:0,answers:{},showResults:false};renderQuiz()}
+// BREATHE SECTION
+let breatheState={currentTab:'breathing'};
+let breathingPlayerState={exercise:null,phase:'ready',timeRemaining:0,round:1,totalRounds:1,intervalId:null,isPaused:false,startTime:0,sessionDuration:0};
+let meditationPlayerState={meditation:null,currentLine:0,timeRemaining:0,intervalId:null,lineIntervalId:null,isPaused:false};
+let soundState={activeSounds:{},audioContext:null,masterGain:null,timers:{}};
+let journalState={selectedMood:null,selectedTags:[],editingId:null};
+function initBreatheSection(){renderBreathingPanel();renderMeditationPanel();renderSoundsPanel();renderJournalPanel();setupBreatheTabs()}
+function setupBreatheTabs(){document.querySelectorAll('.breathe-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.breathe-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.breathe-panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');const tab=t.dataset.breatheTab;breatheState.currentTab=tab;document.getElementById(${tab}Panel).classList.add('active')})})}
+// BREATHING PANEL
+function renderBreathingPanel(){const p=document.getElementById('breathingPanel');const d=getData();const favs=d.favorites.breathing||[];p.innerHTML=<h2 class="section-title">🌬️ Breathing Exercises</h2><p style="color:var(--text-light);font-size:14px;margin-bottom:var(--spacing-lg)">Find your rhythm. Let each breath anchor you in the present.</p><div class="breathing-grid">${BREATHING_EXERCISES.map(ex=><div class="breathing-card" onclick="startBreathingExercise('${ex.id}')"><button class="breathing-card-fav ${favs.includes(ex.id)?'active':''}" onclick="event.stopPropagation();toggleBreatheFavorite('${ex.id}')" title="Favorite">
+f
+a
+v
+s
+.
+i
+n
+c
+l
+u
+d
+e
+s
+(
+e
+x
+.
+i
+d
+)
+?
+′
+♥
+′
+:
+′
+♡
+′
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+b
+r
+e
+a
+t
+h
+i
+n
+g
+−
+c
+a
+r
+d
+−
+h
+e
+a
+d
+e
+r
+"
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+b
+r
+e
+a
+t
+h
+i
+n
+g
+−
+c
+a
+r
+d
+−
+v
+i
+s
+u
+a
+l
+c
+i
+r
+c
+l
+e
+−
+favs.includes(ex.id)? 
+′
+ ♥ 
+′
+ : 
+′
+ ♡ 
+′
+ </button><divclass="breathing−card−header"><divclass="breathing−card−visualcircle−{ex.id==='478'?'478':ex.id==='box'?'box':ex.id==='coherent'?'coherent':'energizing'}"></div><div class="breathing-card-info"><div class="breathing-card-name">
+e
+x
+.
+n
+a
+m
+e
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+b
+r
+e
+a
+t
+h
+i
+n
+g
+−
+c
+a
+r
+d
+−
+d
+e
+s
+c
+"
+>
+ex.name</div><divclass="breathing−card−desc">{ex.description}</div></div></div><div class="breathing-card-meta"><span>✨ 
+e
+x
+.
+b
+e
+s
+t
+F
+o
+r
+<
+/
+s
+p
+a
+n
+>
+ex.bestFor</span>{ex.rounds?<span>🔄 ${ex.rounds} rounds</span>:''}{ex.duration?`<span>⏱️ {Math.floor(ex.duration/60)} min</span>:''}${ex.breaths?<span>💨 ${ex.breaths} breaths</span>:''}</div></div>).join('')}</div>`}
+function toggleBreatheFavorite(id){const d=getData();if(!d.favorites.breathing)d.favorites.breathing=[];const i=d.favorites.breathing.indexOf(id);if(i>=0)d.favorites.breathing.splice(i,1);else d.favorites.breathing.push(id);saveData(d);renderBreathingPanel();showToast(i>=0?'Removed from favorites':'♥ Added to favorites')}
+function startBreathingExercise(id){const ex=BREATHING_EXERCISES.find(e=>e.id===id);if(!ex)return;hapticFeedback();breathingPlayerState={exercise:ex,phase:'ready',timeRemaining:0,round:1,totalRounds:ex.rounds||1,intervalId:null,isPaused:false,startTime:Date.now(),sessionDuration:ex.duration||0};renderBreathingPlayer();setTimeout(()=>startBreathingCountdown(),800)}
+function renderBreathingPlayer(){const ex=breathingPlayerState.exercise;const p=document.createElement('div');p.className=breathing-player theme-${ex.theme};p.id='breathingPlayer';p.innerHTML=<button class="breathing-close" onclick="closeBreathingPlayer()">×</button><div class="breathing-player-title">${ex.name}</div><div class="breathing-player-subtitle">${ex.bestFor}</div><div class="breathing-visual-container"><svg class="breathing-svg" viewBox="0 0 300 300" id="breathingSvg">${getBreathingSVG(ex.id)}</svg><div class="breathing-instruction" id="breathingInstruction">Get Ready</div><div class="breathing-countdown" id="breathingCountdown" style="display:none"></div></div><div class="breathing-round-info" id="breathingRoundInfo">${ex.rounds?Round 1 of 
+e
+x
+.
+r
+o
+u
+n
+d
+s
+‘
+:
+e
+x
+.
+d
+u
+r
+a
+t
+i
+o
+n
+?
+‘
+ex.rounds‘:ex.duration?‘{Math.floor(ex.duration/60)}:00 session:${ex.breaths} breaths}</div><div class="breathing-session-timer" id="breathingSessionTimer">0:00</div><div class="breathing-controls"><button class="breathing-control-btn" id="breathingPauseBtn" onclick="toggleBreathingPause()">⏸️ Pause</button></div>;document.body.appendChild(p)}
+function getBreathingSVG(id){if(id==='478')return<defs><radialGradient id="grad478"><stop offset="0%" stop-color="rgba(255,255,255,0.6)"/><stop offset="100%" stop-color="rgba(255,255,255,0.2)"/></radialGradient></defs><circle id="breathCircle" cx="150" cy="150" r="50" fill="url(#grad478)" style="transition:all 0.3s ease"/>;if(id==='box')return<rect x="75" y="75" width="150" height="150" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="8"/><circle id="boxDot" cx="75" cy="75" r="12" fill="rgba(255,255,255,0.8)" style="transition:all 0.3s ease"/>;if(id==='coherent')return<path id="coherentWave" d="M 0 150 Q 75 100, 150 150 T 300 150" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="4" stroke-linecap="round"/><circle id="coherentDot" cx="150" cy="150" r="20" fill="rgba(255,255,255,0.5)"/>;if(id==='energizing')return<circle cx="150" cy="150" r="60" fill="rgba(255,255,255,0.2)"/><circle id="energyPulse" cx="150" cy="150" r="40" fill="rgba(255,255,255,0.5)"/>;return''}
+function startBreathingCountdown(){const cd=document.getElementById('breathingCountdown');const inst=document.getElementById('breathingInstruction');cd.style.display='block';inst.style.display='none';let c=3;cd.textContent=c;const iv=setInterval(()=>{c--;if(c<=0){clearInterval(iv);cd.style.display='none';inst.style.display='block';runBreathingPhase()}else cd.textContent=c},1000)}
+function runBreathingPhase(){const ex=breathingPlayerState.exercise;if(ex.id==='478')run478();else if(ex.id==='box')runBox();else if(ex.id==='coherent')runCoherent();else if(ex.id==='energizing')runEnergizing()}
+function run478(){const ex=breathingPlayerState.exercise;const phases=[{name:'Breathe In',duration:ex.inhale,action:'inhale'},{name:'Hold',duration:ex.hold,action:'hold'},{name:'Breathe Out',duration:ex.exhale,action:'exhale'}];let pi=0;const circle=document.getElementById('breathCircle');const inst=document.getElementById('breathingInstruction');const cd=document.getElementById('breathingCountdown');const ri=document.getElementById('breathingRoundInfo');const st=document.getElementById('breathingSessionTimer');const runPhase=()=>{if(breathingPlayerState.isPaused){setTimeout(runPhase,100);return}const phase=phases[pi];inst.textContent=phase.name;cd.textContent=phase.duration;cd.style.display='block';inst.style.opacity='0.3';if(phase.action==='inhale'){circle.setAttribute('r','120');circle.style.fill='rgba(255,255,255,0.7)'}else if(phase.action==='hold'){circle.setAttribute('r','120');circle.style.fill='rgba(255,255,255,0.5)'}else{circle.setAttribute('r','50');circle.style.fill='rgba(255,255,255,0.3)'}hapticFeedback();let t=phase.duration;ri.textContent=Round ${breathingPlayerState.round} of ${breathingPlayerState.totalRounds};breathingPlayerState.intervalId=setInterval(()=>{if(breathingPlayerState.isPaused)return;t--;const elapsed=Math.floor((Date.now()-breathingPlayerState.startTime)/1000);const m=Math.floor(elapsed/60);const s=elapsed%60;st.textContent=${m}:${String(s).padStart(2,'0')};if(t<=0){clearInterval(breathingPlayerState.intervalId);pi++;if(pi>=phases.length){pi=0;breathingPlayerState.round++;if(breathingPlayerState.round>breathingPlayerState.totalRounds){completeBreathingExercise();return}}runPhase()}else cd.textContent=t},1000)};runPhase()}
+function runBox(){const ex=breathingPlayerState.exercise;const phases=[{name:'Breathe In',duration:ex.inhale,pos:{x:225,y:75}},{name:'Hold',duration:ex.hold1,pos:{x:225,y:225}},{name:'Breathe Out',duration:ex.exhale,pos:{x:75,y:225}},{name:'Hold',duration:ex.hold2,pos:{x:75,y:75}}];let pi=0;const dot=document.getElementById('boxDot');const inst=document.getElementById('breathingInstruction');const cd=document.getElementById('breathingCountdown');const ri=document.getElementById('breathingRoundInfo');const st=document.getElementById('breathingSessionTimer');const runPhase=()=>{if(breathingPlayerState.isPaused){setTimeout(runPhase,100);return}const phase=phases[pi];inst.textContent=phase.name;cd.textContent=phase.duration;cd.style.display='block';inst.style.opacity='0.3';dot.setAttribute('cx',phase.pos.x);dot.setAttribute('cy',phase.pos.y);hapticFeedback();let t=phase.duration;ri.textContent=Round ${breathingPlayerState.round} of ${breathingPlayerState.totalRounds};breathingPlayerState.intervalId=setInterval(()=>{if(breathingPlayerState.isPaused)return;t--;const elapsed=Math.floor((Date.now()-breathingPlayerState.startTime)/1000);st.textContent=${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')};if(t<=0){clearInterval(breathingPlayerState.intervalId);pi++;if(pi>=phases.length){pi=0;breathingPlayerState.round++;if(breathingPlayerState.round>breathingPlayerState.totalRounds){completeBreathingExercise();return}}runPhase()}else cd.textContent=t},1000)};runPhase()}
+function runCoherent(){const ex=breathingPlayerState.exercise;const inst=document.getElementById('breathingInstruction');const cd=document.getElementById('breathingCountdown');const dot=document.getElementById('coherentDot');const wave=document.getElementById('coherentWave');const st=document.getElementById('breathingSessionTimer');let phase='inhale';let t=ex.inhale;const totalDuration=ex.duration;const startTime=Date.now();cd.style.display='block';inst.textContent='Breathe In';cd.textContent=t;hapticFeedback();const updateWave=(progress)=>{const amp=50Math.sin(progressMath.PI2);const d=M 0 150 Q 75 ${150-amp}, 150 150 T 300 150;wave.setAttribute('d',d);dot.setAttribute('cy',150-amp0.5)};let progress=0;breathingPlayerState.intervalId=setInterval(()=>{if(breathingPlayerState.isPaused)return;t--;const elapsed=Math.floor((Date.now()-startTime)/1000);const remaining=totalDuration-elapsed;if(remaining<=0){completeBreathingExercise();return}st.textContent=${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')};progress+=1/(ex.inhale+ex.exhale);updateWave(progress);if(t<=0){if(phase==='inhale'){phase='exhale';t=ex.exhale;inst.textContent='Breathe Out'}else{phase='inhale';t=ex.inhale;inst.textContent='Breathe In'}cd.textContent=t;hapticFeedback()}else cd.textContent=t},1000)}
+function runEnergizing(){const ex=breathingPlayerState.exercise;const inst=document.getElementById('breathingInstruction');const cd=document.getElementById('breathingCountdown');const pulse=document.getElementById('energyPulse');const ri=document.getElementById('breathingRoundInfo');const st=document.getElementById('breathingSessionTimer');let count=0;const startTime=Date.now();cd.style.display='block';inst.textContent='Quick Breath';cd.textContent=ex.breaths-count;hapticFeedback();breathingPlayerState.intervalId=setInterval(()=>{if(breathingPlayerState.isPaused)return;count++;const elapsed=Math.floor((Date.now()-startTime)/1000);st.textContent=${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')};ri.textContent=Breath ${count} of ${ex.breaths};cd.textContent=ex.breaths-count;pulse.setAttribute('r',count%2===0?'60':'30');pulse.style.fill=count%2===0?'rgba(255,255,255,0.7)':'rgba(255,255,255,0.4)';hapticFeedback();if(count>=ex.breaths){completeBreathingExercise()}},1000)}
+function toggleBreathingPause(){breathingPlayerState.isPaused=!breathingPlayerState.isPaused;const b=document.getElementById('breathingPauseBtn');b.textContent=breathingPlayerState.isPaused?'▶️ Resume':'⏸️ Pause'}
+function closeBreathingPlayer(){if(confirm('End this session?')){if(breathingPlayerState.intervalId)clearInterval(breathingPlayerState.intervalId);const p=document.getElementById('breathingPlayer');if(p)p.remove()}}
+function completeBreathingExercise(){if(breathingPlayerState.intervalId)clearInterval(breathingPlayerState.intervalId);const d=getData();if(!d.breathingHistory)d.breathingHistory=[];const duration=Math.floor((Date.now()-breathingPlayerState.startTime)/1000);d.breathingHistory.push({date:getTodayDateString(),exercise:breathingPlayerState.exercise.id,duration:duration,completed:true,timestamp:new Date().toISOString()});saveData(d);const inst=document.getElementById('breathingInstruction');const cd=document.getElementById('breathingCountdown');cd.style.display='none';inst.style.opacity='1';inst.textContent='✓ Beautiful practice';hapticFeedback();setTimeout(()=>{const p=document.getElementById('breathingPlayer');if(p)p.remove();showToast('🌬️ Breathing complete! Beautiful practice.')},2500)}
+// MEDITATION PANEL
+function renderMeditationPanel(){const p=document.getElementById('meditationPanel');const d=getData();const favs=d.favorites.meditations||[];p.innerHTML=<h2 class="section-title">🧘‍♀️ Guided Meditations</h2><p style="color:var(--text-light);font-size:14px;margin-bottom:var(--spacing-lg)">Gentle guidance for your inner journey. Find a quiet space.</p><div class="meditation-grid">${MEDITATIONS.map(m=><div class="meditation-card" onclick="startMeditation('${m.id}')"><button class="meditation-fav ${favs.includes(m.id)?'active':''}" onclick="event.stopPropagation();toggleMeditationFavorite('${m.id}')" title="Favorite">
+f
+a
+v
+s
+.
+i
+n
+c
+l
+u
+d
+e
+s
+(
+m
+.
+i
+d
+)
+?
+′
+♥
+′
+:
+′
+♡
+′
+<
+/
+b
+u
+t
+t
+o
+n
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+d
+i
+t
+a
+t
+i
+o
+n
+−
+i
+c
+o
+n
+"
+>
+favs.includes(m.id)? 
+′
+ ♥ 
+′
+ : 
+′
+ ♡ 
+′
+ </button><divclass="meditation−icon">{m.id==='release-shame'?'💝':m.id==='body-gratitude'?'🌸':m.id==='hormonal-harmony'?'☯️':m.id==='sleep-prep'?'🌙':m.id==='morning-intention'?'☀️':'🍃'}</div><div class="meditation-info"><div class="meditation-name">
+m
+.
+n
+a
+m
+e
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+m
+e
+d
+i
+t
+a
+t
+i
+o
+n
+−
+d
+e
+s
+c
+"
+>
+m.name</div><divclass="meditation−desc">{m.description}</div><div class="meditation-duration">⏱️ ${Math.floor(m.duration/60)} minutes</div></div></div>).join('')}</div>}
+function toggleMeditationFavorite(id){const d=getData();if(!d.favorites.meditations)d.favorites.meditations=[];const i=d.favorites.meditations.indexOf(id);if(i>=0)d.favorites.meditations.splice(i,1);else d.favorites.meditations.push(id);saveData(d);renderMeditationPanel();showToast(i>=0?'Removed':'♥ Added to favorites')}
+function startMeditation(id){const m=MEDITATIONS.find(x=>x.id===id);if(!m)return;hapticFeedback();meditationPlayerState={meditation:m,currentLine:0,timeRemaining:m.duration,intervalId:null,lineIntervalId:null,isPaused:false};renderMeditationPlayer();setTimeout(()=>runMeditation(),1000)}
+function renderMeditationPlayer(){const m=meditationPlayerState.meditation;const p=document.createElement('div');p.className=meditation-player theme-${m.theme};p.id='meditationPlayer';p.innerHTML=<div class="meditation-header"><div class="meditation-title">${m.name}</div><button class="meditation-close" onclick="closeMeditationPlayer()">×</button></div><div class="meditation-content"><div class="meditation-text" id="meditationText"></div></div><div class="meditation-timer-display" id="meditationTimerDisplay">${Math.floor(m.duration/60)}:00</div><div class="meditation-controls"><button class="breathing-control-btn" id="meditationPauseBtn" onclick="toggleMeditationPause()">⏸️ Pause</button></div>;document.body.appendChild(p)}
+function runMeditation(){const m=meditationPlayerState.meditation;const textEl=document.getElementById('meditationText');const timerEl=document.getElementById('meditationTimerDisplay');const lineDuration=(m.duration/m.text.length)*1000;const showLine=()=>{if(meditationPlayerState.currentLine<m.text.length){textEl.classList.remove('visible');setTimeout(()=>{if(!meditationPlayerState.isPaused){textEl.textContent=m.text[meditationPlayerState.currentLine];textEl.classList.add('visible');meditationPlayerState.currentLine++}},500)}};showLine();meditationPlayerState.lineIntervalId=setInterval(()=>{if(!meditationPlayerState.isPaused)showLine()},lineDuration);meditationPlayerState.intervalId=setInterval(()=>{if(!meditationPlayerState.isPaused){meditationPlayerState.timeRemaining--;const mn=Math.floor(meditationPlayerState.timeRemaining/60);const sc=meditationPlayerState.timeRemaining%60;timerEl.textContent=${mn}:${String(sc).padStart(2,'0')};if(meditationPlayerState.timeRemaining<=0)completeMeditation()}},1000)}
+function toggleMeditationPause(){meditationPlayerState.isPaused=!meditationPlayerState.isPaused;const b=document.getElementById('meditationPauseBtn');b.textContent=meditationPlayerState.isPaused?'▶️ Resume':'⏸️ Pause'}
+function closeMeditationPlayer(){if(confirm('End this meditation?')){if(meditationPlayerState.intervalId)clearInterval(meditationPlayerState.intervalId);if(meditationPlayerState.lineIntervalId)clearInterval(meditationPlayerState.lineIntervalId);const p=document.getElementById('meditationPlayer');if(p)p.remove()}}
+function completeMeditation(){if(meditationPlayerState.intervalId)clearInterval(meditationPlayerState.intervalId);if(meditationPlayerState.lineIntervalId)clearInterval(meditationPlayerState.lineIntervalId);const d=getData();if(!d.meditationHistory)d.meditationHistory=[];d.meditationHistory.push({date:getTodayDateString(),meditation:meditationPlayerState.meditation.id,duration:meditationPlayerState.meditation.duration,completed:true,timestamp:new Date().toISOString()});saveData(d);const textEl=document.getElementById('meditationText');textEl.textContent='✨ Beautiful practice. Carry this peace with you.';textEl.classList.add('visible');hapticFeedback();setTimeout(()=>{const p=document.getElementById('meditationPlayer');if(p)p.remove();showToast('🧘‍♀️ Meditation complete. Namaste.')},3000)}
+// SOUNDS PANEL - Web Audio API
+function renderSoundsPanel(){const p=document.getElementById('soundsPanel');const d=getData();const vol=d.soundPreferences.defaultVolume||0.5;const timer=d.soundPreferences.defaultTimer||0;p.innerHTML=<h2 class="section-title">🎵 Ambient Sounds</h2><p style="color:var(--text-light);font-size:14px;margin-bottom:var(--spacing-lg)">Layer sounds to create your perfect atmosphere.</p><div class="sound-player"><div class="sound-grid">${SOUNDS.map(s=><div class="sound-option" data-sound="${s.id}" onclick="toggleSound('${s.id}')"><div class="sound-icon">
+s
+.
+i
+c
+o
+n
+<
+/
+d
+i
+v
+>
+<
+d
+i
+v
+c
+l
+a
+s
+s
+=
+"
+s
+o
+u
+n
+d
+−
+n
+a
+m
+e
+"
+>
+s.icon</div><divclass="sound−name">{s.name}</div></div>).join('')}</div><div class="sound-controls"><div class="sound-control-row"><span class="sound-control-label">🔊 Volume</span><input type="range" style="flex:1" min="0" max="100" value="${vol*100}" oninput="setMasterVolume(this.value/100)"></div><div class="sound-control-row"><span class="sound-control-label">⏱️ Timer</span><div class="timer-options"><button class="timer-option ${timer===0?'active':''}" onclick="setSoundTimer(0)">Off</button><button class="timer-option ${timer===15?'active':''}" onclick="setSoundTimer(15)">15m</button><button class="timer-option ${timer===30?'active':''}" onclick="setSoundTimer(30)">30m</button><button class="timer-option ${timer===60?'active':''}" onclick="setSoundTimer(60)">60m</button></div></div></div></div><div id="soundFloatingContainer"></div>}
+function getAudioContext(){if(!soundState.audioContext){soundState.audioContext=new(window.AudioContext||window.webkitAudioContext)();soundState.masterGain=soundState.audioContext.createGain();const d=getData();soundState.masterGain.gain.value=d.soundPreferences.defaultVolume||0.5;soundState.masterGain.connect(soundState.audioContext.destination)}if(soundState.audioContext.state==='suspended')soundState.audioContext.resume();return soundState.audioContext}
+function toggleSound(id){const el=document.querySelector([data-sound="${id}"]);if(soundState.activeSounds[id]){stopSound(id);el.classList.remove('active')}else{startSound(id);el.classList.add('active')}updateFloatingPlayer()}
+function startSound(id){const ctx=getAudioContext();const gain=ctx.createGain();gain.gain.value=0;gain.gain.linearRampToValueAtTime(1,ctx.currentTime+1);gain.connect(soundState.masterGain);let nodes=[];if(id==='white'){const buf=ctx.createBuffer(1,ctx.sampleRate2,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()2-1;const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;src.connect(gain);src.start();nodes=[src]}else if(id==='pink'){const buf=ctx.createBuffer(1,ctx.sampleRate2,ctx.sampleRate);const d=buf.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<d.length;i++){const w=Math.random()2-1;b0=0.99886b0+w0.0555179;b1=0.99332b1+w0.0750759;b2=0.969b2+w0.153852;b3=0.8665b3+w0.3104856;b4=0.55b4+w0.5329522;b5=-0.7616b5-w0.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w0.5362)0.11;b6=w0.115926}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;src.connect(gain);src.start();nodes=[src]}else if(id==='brown'){const buf=ctx.createBuffer(1,ctx.sampleRate2,ctx.sampleRate);const d=buf.getChannelData(0);let last=0;for(let i=0;i<d.length;i++){const w=Math.random()2-1;last=(last+(0.02w))/1.02;d[i]=last3.5}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;src.connect(gain);src.start();nodes=[src]}else if(id==='rain'){const buf=ctx.createBuffer(1,ctx.sampleRate3,ctx.sampleRate);const d=buf.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<d.length;i++){const w=Math.random()2-1;b0=0.99886b0+w0.0555179;b1=0.99332b1+w0.0750759;b2=0.969b2+w0.153852;b3=0.8665b3+w0.3104856;b4=0.55b4+w0.5329522;b5=-0.7616b5-w0.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w0.5362)0.08;b6=w0.115926}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const filter=ctx.createBiquadFilter();filter.type='highpass';filter.frequency.value=1000;src.connect(filter);filter.connect(gain);src.start();nodes=[src,filter]}else if(id==='ocean'){const buf=ctx.createBuffer(1,ctx.sampleRate4,ctx.sampleRate);const d=buf.getChannelData(0);let b0=0,b1=0,b2=0;for(let i=0;i<d.length;i++){const w=Math.random()2-1;b0=0.99b0+w0.1;b1=0.98b1+w0.15;b2=0.95b2+w0.2;d[i]=(b0+b1+b2)0.15}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const lfo=ctx.createOscillator();lfo.frequency.value=0.1;const lfoGain=ctx.createGain();lfoGain.gain.value=0.3;lfo.connect(lfoGain);lfoGain.connect(gain.gain);const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=500;src.connect(filter);filter.connect(gain);src.start();lfo.start();nodes=[src,lfo,filter,lfoGain]}else if(id==='forest'){const buf=ctx.createBuffer(1,ctx.sampleRate3,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()2-1)*0.05;const wind=ctx.createBufferSource();wind.buffer=buf;wind.loop=true;const windFilter=ctx.createBiquadFilter();windFilter.type='bandpass';windFilter.frequency.value=800;windFilter.Q.value=0.5;wind.connect(windFilter);windFilter.connect(gain);wind.start();const birds=[];[1200,1800,2400].forEach((f,i)=>{const osc=ctx.createOscillator();osc.type='sine';osc.frequency.value=f;const oscGain=ctx.createGain();oscGain.gain.value=0;const lfo=ctx.createOscillator();lfo.frequency.value=0.3+i0.2;const lfoGain=ctx.createGain();lfoGain.gain.value=0.02;lfo.connect(lfoGain);lfoGain.connect(oscGain.gain);osc.connect(oscGain);oscGain.connect(gain);osc.start();lfo.start();birds.push(osc,lfo,oscGain,lfoGain)});nodes=[wind,windFilter,...birds]}soundState.activeSounds[id]={gain,nodes}}
+function stopSound(id){const s=soundState.activeSounds[id];if(!s)return;const ctx=soundState.audioContext;s.gain.gain.linearRampToValueAtTime(0,ctx.currentTime+0.5);setTimeout(()=>{s.nodes.forEach(n=>{try{if(n.stop)n.stop();else if(n.disconnect)n.disconnect()}catch(e){}});delete soundState.activeSounds[id]},600);if(soundState.timers[id]){clearTimeout(soundState.timers[id]);delete soundState.timers[id]}}
+function setMasterVolume(v){if(soundState.masterGain)soundState.masterGain.gain.value=v;const d=getData();d.soundPreferences.defaultVolume=v;saveData(d)}
+function setSoundTimer(mins){const d=getData();d.soundPreferences.defaultTimer=mins;saveData(d);renderSoundsPanel();Object.keys(soundState.activeSounds).forEach(id=>{if(soundState.timers[id])clearTimeout(soundState.timers[id]);if(mins>0){soundState.timers[id]=setTimeout(()=>{stopSound(id);const el=document.querySelector([data-sound="${id}"]);if(el)el.classList.remove('active');updateFloatingPlayer();showToast('Sound timer ended')},mins601000)}})}
+function updateFloatingPlayer(){const c=document.getElementById('soundFloatingContainer');if(!c)return;const active=Object.keys(soundState.activeSounds);if(active.length===0){c.innerHTML='';return}const names=active.map(id=>SOUNDS.find(s=>s.id===id)).filter(Boolean);c.innerHTML=<div class="sound-floating"><div class="sound-floating-icon">${names.map(n=>n.icon).join('')}</div><div class="sound-floating-info"><div class="sound-floating-name">${names.map(n=>n.name).join(' + ')}</div><div class="sound-floating-timer">Playing</div></div><div class="sound-floating-controls"><button class="sound-floating-btn" onclick="stopAllSounds()" title="Stop all">⏹️</button></div></div>}
+function stopAllSounds(){Object.keys(soundState.activeSounds).forEach(id=>stopSound(id));document.querySelectorAll('.sound-option').forEach(el=>el.classList.remove('active'));updateFloatingPlayer()}
+// JOURNAL PANEL
+function renderJournalPanel(){const p=document.getElementById('journalPanel');const d=getData();const entries=d.journalEntries||[];const today=getTodayDateString();const todayEntry=entries.find(e=>e.date===today);const prompt=getDailyPrompt();journalState={selectedMood:todayEntry?todayEntry.mood:null,selectedTags:todayEntry?todayEntry.tags||[]:[],editingId:todayEntry?todayEntry.id:null};p.innerHTML=<h2 class="section-title">📓 Your Journal</h2><p style="color:var(--text-light);font-size:14px;margin-bottom:var(--spacing-lg)">A private space for your thoughts. Only you can see this.</p><div class="journal-container"><div class="journal-prompt-card"><div class="journal-prompt-label">Today's Prompt</div><div class="journal-prompt-text">${prompt}</div></div><textarea class="journal-textarea" id="journalText" placeholder="Write freely... this is your space.">${todayEntry?todayEntry.entry:''}</textarea><div class="journal-meta"><span class="journal-mood-label">Mood:</span><div class="mood-selector"><div class="mood-option ${journalState.selectedMood===1?'selected':''}" onclick="selectJournalMood(1)">😢</div><div class="mood-option ${journalState.selectedMood===2?'selected':''}" onclick="selectJournalMood(2)">😕</div><div class="mood-option ${journalState.selectedMood===3?'selected':''}" onclick="selectJournalMood(3)">😐</div><div class="mood-option ${journalState.selectedMood===4?'selected':''}" onclick="selectJournalMood(4)">😊</div><div class="mood-option ${journalState.selectedMood===5?'selected':''}" onclick="selectJournalMood(5)">😄</div></div></div><div class="journal-tags">${JOURNAL_TAGS.map(t=><button class="journal-tag ${journalState.selectedTags.includes(t)?'selected':''}" onclick="toggleJournalTag('${t}')">#{t}</button>`).join('')}</div><div class="journal-actions"><button class="btn-primary" onclick="saveJournalEntry()" style="margin-top:0;flex:1">💾 Save Entry</button><button class="btn-secondary" onclick="exportJournal()" style="margin-top:0">📤 Export</button></div><input type="text" class="journal-search" placeholder="🔍 Search your journal..." oninput="filterJournalEntries(this.value)"><div class="journal-entries-list" id="journalEntriesList">{renderJournalEntries(entries)}</div></div>`}
+function getDailyPrompt(){const cats=Object.keys(JOURNAL_PROMPTS);const today=new Date();const dayOfYear=Math.floor((today-new Date(today.getFullYear(),0,0))/(10006060*24));const catIdx=dayOfYear%cats.length;const cat=cats[catIdx];const prompts=JOURNAL_PROMPTS[cat];return prompts[dayOfYear%prompts.length]}
+function selectJournalMood(m){journalState.selectedMood=m;document.querySelectorAll('.mood-option').forEach(el=>el.classList.remove('selected'));document.querySelectorAll('.mood-option')[m-1].classList.add('selected')}
+function toggleJournalTag(t){const i=journalState.selectedTags.indexOf(t);if(i>=0)journalState.selectedTags.splice(i,1);else journalState.selectedTags.push(t);document.querySelectorAll('.journal-tag').forEach(el=>{if(el.textContent===#${t})el.classList.toggle('selected')})}
+function saveJournalEntry(){const text=document.getElementById('journalText').value.trim();if(!text){showToast('Please write something first');return}const d=getData();if(!d.journalEntries)d.journalEntries=[];const today=getTodayDateString();const existing=d.journalEntries.findIndex(e=>e.date===today);const entry={id:existing>=0?d.journalEntries[existing].id:Date.now(),date:today,time:new Date().toLocaleTimeString(),prompt:getDailyPrompt(),entry:text,mood:journalState.selectedMood||3,tags:journalState.selectedTags,timestamp:new Date().toISOString()};if(existing>=0)d.journalEntries[existing]=entry;else d.journalEntries.push(entry);saveData(d);showToast('📓 Journal saved');renderJournalPanel()}
+function renderJournalEntries(entries,filter=''){let filtered=entries;if(filter){const f=filter.toLowerCase();filtered=entries.filter(e=>e.entry.toLowerCase().includes(f)||(e.tags||[]).some(t=>t.includes(f)))}if(filtered.length===0)return'<p style="text-align:center;color:var(--text-light);padding:var(--spacing-md);font-size:14px">No entries yet. Start writing above ✨</p>';return filtered.slice().reverse().slice(0,20).map(e=>{const moodEmoji=['','😢','😕','😐','😊','😄'][e.mood]||'';const df=new Date(e.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});return<div class="journal-entry"><div class="journal-entry-header"><div class="journal-entry-date">${df} • ${e.time||''}</div><div class="journal-entry-mood">${moodEmoji}</div></div>${e.prompt?<div class="journal-entry-prompt">"{e.prompt}"</div>`:''}<div class="journal-entry-text">{e.entry}</div>{e.tags&&e.tags.length>0?`<div class="journal-entry-tags">{e.tags.map(t=><span class="journal-entry-tag">#${t}</span>).join('')}</div>:''}<div class="journal-entry-actions"><button class="journal-entry-btn" onclick="deleteJournalEntry(${e.id})" title="Delete">🗑️</button></div></div>}).join('')}
+function filterJournalEntries(q){const d=getData();const entries=d.journalEntries||[];document.getElementById('journalEntriesList').innerHTML=renderJournalEntries(entries,q)}
+function deleteJournalEntry(id){if(!confirm('Delete this entry?'))return;const d=getData();d.journalEntries=d.journalEntries.filter(e=>e.id!==id);saveData(d);renderJournalPanel();showToast('Entry deleted')}
+function exportJournal(){const d=getData();const entries=d.journalEntries||[];if(entries.length===0){showToast('No entries to export');return}const text=entries.map(e=>=== ${e.date} ${e.time||''} ===\nMood: ${['','😢','😕','😐','😊','😄'][e.mood]||''}\nPrompt: ${e.prompt||'Free writing'}\nTags: ${(e.tags||[]).join(', ')}\n\n${e.entry}\n).join('\n\n');const blob=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=pcos-harmony-journal-${getTodayDateString()}.txt;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('📓 Journal exported')}
+// DATA EXPORT / IMPORT
+function exportData(){const d=getData();const j=JSON.stringify(d,null,2);const b=new Blob([j],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=pcos-harmony-backup-${getTodayDateString()}.json;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);showToast('✓ Backup exported')}
+function importData(file){const r=new FileReader();r.onload=e=>{try{const i=JSON.parse(e.target.result);if(!i.userProfile||!i.cycleLogs)throw new Error('Invalid');if(confirm('Replace all current data?')){saveData(i);refreshAll();showToast('✓ Imported')}}catch(err){showToast('❌ Invalid file')}};r.readAsText(file)}
+function clearAllData(){if(confirm('⚠️ Delete ALL data? This cannot be undone.')){if(confirm('Really sure?')){localStorage.removeItem('pcosHarmonyData');initializeData();refreshAll();showToast('All data cleared')}}}
+function refreshAll(){renderHeader();renderAffirmation();renderRecommendations();renderStats();renderMoodTrend();loadTodayMood();renderPatternCard();renderCalendar();renderCycleChart();renderInsights();renderTodaySuggestion();renderWorkoutLibrary();renderFavorites();renderHistory();renderQuiz();initBreatheSection()}
+// NAVIGATION
+function setupNavigation(){const navItems=document.querySelectorAll('.nav-item');const sections=document.querySelectorAll('.section');navItems.forEach(item=>{item.addEventListener('click',()=>{const t=item.dataset.section;navItems.forEach(n=>n.classList.remove('active'));item.classList.add('active');sections.forEach(s=>s.classList.remove('active'));document.getElementById(t).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(t==='workouts'){renderTodaySuggestion();renderWorkoutLibrary();renderFavorites();renderHistory()}if(t==='quiz')renderQuiz();if(t==='breathe')initBreatheSection()})});document.querySelectorAll('.recommendation-card').forEach(card=>{card.addEventListener('click',()=>{const t=card.dataset.section;if(t){const n=document.querySelector(.nav-item[data-section="${t}"]);if(n)n.click()}})})}
+function setupMoodSliders(){['energy','mood','cravings','bloating'].forEach(s=>{document.getElementById(s).addEventListener('input',updateSliderValues)});document.getElementById('saveMoodBtn').addEventListener('click',saveMood)}
+function saveMood(){const d=getData();const today=getTodayDateString();const e={date:today,energy:parseInt(document.getElementById('energy').value),mood:parseInt(document.getElementById('mood').value),cravings:parseInt(document.getElementById('cravings').value),bloating:parseInt(document.getElementById('bloating').value)};d.moodLogs=d.moodLogs.filter(l=>l.date!==today);d.moodLogs.push(e);if(d.moodLogs.length>30)d.moodLogs=d.moodLogs.slice(-30);saveData(d);renderStats();renderMoodTrend();renderRecommendations();renderTodaySuggestion();const b=document.getElementById('saveMoodBtn');b.textContent='✓ Saved!';b.style.background='var(--primary-dark)';setTimeout(()=>{b.textContent="Save Today's Mood";b.style.background='var(--primary)'},2000)}
+function setupCycleHandlers(){document.getElementById('prevMonth').addEventListener('click',()=>{currentCalendarDate.setMonth(currentCalendarDate.getMonth()-1);renderCalendar()});document.getElementById('nextMonth').addEventListener('click',()=>{currentCalendarDate.setMonth(currentCalendarDate.getMonth()+1);renderCalendar()});const cg=document.getElementById('calendarGrid');let tsx=0;cg.addEventListener('touchstart',e=>{tsx=e.touches[0].clientX});cg.addEventListener('touchend',e=>{const tex=e.changedTouches[0].clientX;const diff=tsx-tex;if(Math.abs(diff)>50){if(diff>0)currentCalendarDate.setMonth(currentCalendarDate.getMonth()+1);else currentCalendarDate.setMonth(currentCalendarDate.getMonth()-1);renderCalendar()}});document.getElementById('logPeriodBtn').addEventListener('click',()=>openDayModal(getTodayDateString()));document.getElementById('logSymptomsBtn').addEventListener('click',()=>openDayModal(getTodayDateString()));document.getElementById('exportBtn').addEventListener('click',exportData);document.getElementById('exportBtn2').addEventListener('click',exportData);document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());document.getElementById('importBtn2').addEventListener('click',()=>document.getElementById('importFile').click());document.getElementById('importFile').addEventListener('change',e=>{if(e.target.files[0]){importData(e.target.files[0]);e.target.value=''}});document.getElementById('clearDataBtn').addEventListener('click',clearAllData)}
+function setupWorkoutHandlers(){document.querySelectorAll('.workout-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.workout-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.workout-tab-content').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(${t.dataset.workoutTab}Tab).classList.add('active');if(t.dataset.workoutTab==='favorites')renderFavorites();if(t.dataset.workoutTab==='history')renderHistory()})});document.getElementById('workoutSearch').addEventListener('input',e=>{currentWorkoutSearch=e.target.value;renderWorkoutLibrary()});document.querySelectorAll('.filter-chip').forEach(c=>{c.addEventListener('click',()=>{document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');currentWorkoutFilter=c.dataset.filter;renderWorkoutLibrary()})})}
+// Welcome Modal
+function showWelcomeModal(){const d=getData();if(d.userProfile.name)return;const o=document.createElement('div');o.className='modal-overlay center';o.innerHTML=<div class="welcome-modal"><h2>Welcome to PCOS Harmony 🌸</h2><p>Let's personalize your experience. What should we call you?</p><input type="text" id="userNameInput" placeholder="Your name" maxlength="20"><button class="btn-primary" id="saveNameBtn" style="margin-top:0">Let's Begin</button></div>;document.body.appendChild(o);const i=document.getElementById('userNameInput');const s=document.getElementById('saveNameBtn');i.focus();const save=()=>{const n=i.value.trim();if(n){d.userProfile.name=n;saveData(d);o.remove();renderHeader()}};s.addEventListener('click',save);i.addEventListener('keypress',e=>{if(e.key==='Enter')save()})}
+// INIT
+function init(){initializeData();renderHeader();renderAffirmation();renderRecommendations();renderStats();renderMoodTrend();loadTodayMood();renderPatternCard();renderCalendar();renderCycleChart();renderInsights();renderTodaySuggestion();renderWorkoutLibrary();renderFavorites();renderHistory();renderQuiz();initBreatheSection();setupNavigation();setupMoodSliders();setupCycleHandlers();setupWorkoutHandlers();setTimeout(showWelcomeModal,500)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</content>
+</write_to_file>
